@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>프롬프트 생성기</title>
+<link rel="stylesheet" href="./prompt-generator/styles/app.css">
+</head>
+<body>
+
+<div class="header">
+  <h1>✦ PROMPT BUILDER</h1>
+  <p>인물·의상·장소·분위기를 선택해 이미지 생성 프롬프트를 만드세요</p>
+</div>
+
+<div class="layout">
+  <div class="section">
+    <div class="section-title"><span class="dot"></span> 인물 기본</div>
+    <div class="grid-2">
+      <div>
+        <div class="sub-label">성별</div>
+        <div class="tag-group" id="gender"></div>
+        <div class="sub-label">나이대</div>
+        <div class="tag-group" id="age"></div>
+      </div>
+      <div>
+        <div class="sub-label">국적/인종</div>
+        <div class="tag-group" id="ethnicity"></div>
+        <div class="sub-label">인원</div>
+        <div class="tag-group" id="count"></div>
+      </div>
+    </div>
+  </div>
+  <div class="divider"></div>
+
+  <div class="section">
+    <div class="section-title"><span class="dot g"></span> 헤어스타일</div>
+    <div class="sub-label">길이</div>
+    <div class="tag-group" id="hair-length"></div>
+    <div class="sub-label">스타일</div>
+    <div class="tag-group" id="hair-style"></div>
+    <div class="sub-label">색상</div>
+    <div class="tag-group" id="hair-color"></div>
+  </div>
+  <div class="divider"></div>
+
+  <div class="section">
+    <div class="section-title"><span class="dot g"></span> 얼굴 & 표정</div>
+    <div class="sub-label">얼굴형</div>
+    <div class="tag-group" id="face-shape"></div>
+    <div class="sub-label">표정</div>
+    <div class="tag-group" id="expression"></div>
+    <div class="sub-label">눈 타입</div>
+    <div class="tag-group" id="eyes"></div>
+  </div>
+  <div class="divider"></div>
+
+  <div class="section">
+    <div class="section-title"><span class="dot b"></span> 체형 & 신체</div>
+    <div class="sub-label">전체 체형</div>
+    <div class="tag-group" id="body-type"></div>
+    <div class="sub-label">키</div>
+    <div class="tag-group" id="height"></div>
+    <div class="sub-label">피부 톤</div>
+    <div class="tag-group" id="skin"></div>
+  </div>
+  <div class="divider"></div>
+
+  <div class="section">
+    <div class="section-title"><span class="dot"></span> 의상</div>
+    <div class="sub-label">상의</div>
+    <div class="tag-group" id="top"></div>
+    <div class="sub-label">하의</div>
+    <div class="tag-group" id="bottom"></div>
+    <div class="sub-label">전체/아우터</div>
+    <div class="tag-group" id="outfit"></div>
+    <div class="sub-label">신발</div>
+    <div class="tag-group" id="shoes"></div>
+    <div class="sub-label">액세서리</div>
+    <div class="tag-group" id="accessories"></div>
+  </div>
+  <div class="divider"></div>
+
+  <div class="section">
+    <div class="section-title"><span class="dot g"></span> 장소 & 배경</div>
+    <div class="sub-label">실내</div>
+    <div class="tag-group" id="location-indoor"></div>
+    <div class="sub-label">실외</div>
+    <div class="tag-group" id="location-outdoor"></div>
+    <div class="sub-label">특수 배경</div>
+    <div class="tag-group" id="location-special"></div>
+  </div>
+  <div class="divider"></div>
+
+  <div class="section">
+    <div class="section-title"><span class="dot b"></span> 분위기 & 조명</div>
+    <div class="sub-label">분위기</div>
+    <div class="tag-group" id="mood"></div>
+    <div class="sub-label">조명</div>
+    <div class="tag-group" id="lighting"></div>
+    <div class="sub-label">시간대</div>
+    <div class="tag-group" id="time"></div>
+    <div class="sub-label">날씨/계절</div>
+    <div class="tag-group" id="weather"></div>
+  </div>
+  <div class="divider"></div>
+
+  <div class="section">
+    <div class="section-title"><span class="dot"></span> 행동 & 포즈</div>
+    <div class="sub-label">포즈</div>
+    <div class="tag-group" id="pose"></div>
+    <div class="sub-label">행동</div>
+    <div class="tag-group" id="action"></div>
+  </div>
+  <div class="divider"></div>
+
+  <div class="section" style="margin-bottom: 180px;">
+    <div class="section-title"><span class="dot g"></span> 촬영 & 구도</div>
+    <div class="sub-label">구도</div>
+    <div class="tag-group" id="shot"></div>
+    <div class="sub-label">스타일</div>
+    <div class="tag-group" id="style"></div>
+  </div>
+</div>
+
+<div class="prompt-box-wrapper">
+  <div class="prompt-box">
+    <div class="prompt-label-row">
+      <span class="prompt-label">▸ 한글 PROMPT</span>
+      <div class="btn-row">
+        <button class="btn btn-clear" id="clearBtn" type="button">초기화</button>
+        <button class="btn btn-translate" id="translateBtn" type="button">EN 번역</button>
+        <button class="btn btn-copy" id="copyKoreanBtn" type="button">한글 복사</button>
+      </div>
+    </div>
+    <textarea class="prompt-textarea" id="promptOutput" placeholder="위에서 옵션을 선택하면 프롬프트가 자동 생성됩니다..." rows="3"></textarea>
+    <div id="translatedWrapper" style="display:none;">
+      <div class="prompt-label-row" style="margin-top:10px; margin-bottom:6px;">
+        <span class="prompt-label" style="color:var(--accent3);">▸ EN PROMPT</span>
+        <button class="btn btn-copy-en" id="copyEnglishBtn" type="button">영문 복사</button>
+      </div>
+      <div class="translated-box visible" id="translatedBox"></div>
+    </div>
+  </div>
+</div>
+
+<div class="copy-toast" id="copyToast">✓ 복사됨</div>
+
+<script>
+window.PROMPT_GENERATOR_CONFIG = window.PROMPT_GENERATOR_CONFIG || {};
+</script>
+<script defer src="./prompt-generator/data/prompt-data.js"></script>
+<script defer src="./prompt-generator/core/build-prompt.js"></script>
+<script defer src="./prompt-generator/services/translate-service.js"></script>
+<script defer src="./prompt-generator/storage/selection-storage.js"></script>
+<script defer src="./prompt-generator/ui/app.js"></script>
+</body>
+</html>
