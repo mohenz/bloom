@@ -9,7 +9,15 @@
 
   const DATA = dataModule.DATA;
   const SINGLE_SELECT_KEYS = dataModule.SINGLE_SELECT_KEYS;
+  const DEMO_USER = {
+    email: 'admin@bloom.local',
+    password: 'bloom1234',
+    name: 'Bloom Admin',
+  };
+
   const state = {
+    currentScreen: 'login',
+    currentUser: null,
     selections: createEmptySelections(),
     promptOutput: '',
     sentenceText: '',
@@ -44,6 +52,19 @@
   }
 
   function cacheDom() {
+    dom.loginScreen = documentRef.getElementById('loginScreen');
+    dom.dashboardScreen = documentRef.getElementById('dashboardScreen');
+    dom.promptBuilderScreen = documentRef.getElementById('promptBuilderScreen');
+    dom.loginForm = documentRef.getElementById('loginForm');
+    dom.emailInput = documentRef.getElementById('emailInput');
+    dom.passwordInput = documentRef.getElementById('passwordInput');
+    dom.loginError = documentRef.getElementById('loginError');
+    dom.dashboardUserBadge = documentRef.getElementById('dashboardUserBadge');
+    dom.builderUserBadge = documentRef.getElementById('builderUserBadge');
+    dom.dashboardLogoutBtn = documentRef.getElementById('dashboardLogoutBtn');
+    dom.builderLogoutBtn = documentRef.getElementById('builderLogoutBtn');
+    dom.openPromptBuilderBtn = documentRef.getElementById('openPromptBuilderBtn');
+    dom.backToDashboardBtn = documentRef.getElementById('backToDashboardBtn');
     dom.promptOutput = documentRef.getElementById('promptOutput');
     dom.sentenceWrapper = documentRef.getElementById('sentenceWrapper');
     dom.sentenceBox = documentRef.getElementById('sentenceBox');
@@ -58,7 +79,7 @@
     dom.copyToast = documentRef.getElementById('copyToast');
   }
 
-  function restoreState() {
+  function restorePromptState() {
     const savedState = storageModule.loadState();
     if (!savedState) {
       return;
@@ -70,12 +91,37 @@
     state.translatedText = typeof savedState.translatedText === 'string' ? savedState.translatedText : '';
   }
 
-  function persistState() {
+  function restoreSession() {
+    const savedSession = storageModule.loadSession();
+    if (!savedSession || savedSession.email !== DEMO_USER.email) {
+      return;
+    }
+
+    state.currentUser = {
+      email: savedSession.email,
+      name: savedSession.name || DEMO_USER.name,
+    };
+    state.currentScreen = 'dashboard';
+  }
+
+  function persistPromptState() {
     storageModule.saveState({
       selections: state.selections,
       promptOutput: state.promptOutput,
       sentenceText: state.sentenceText,
       translatedText: state.translatedText,
+    });
+  }
+
+  function persistSession() {
+    if (!state.currentUser) {
+      storageModule.clearSession();
+      return;
+    }
+
+    storageModule.saveSession({
+      email: state.currentUser.email,
+      name: state.currentUser.name,
     });
   }
 
@@ -111,7 +157,7 @@
         tag.dataset.color = definition.color || '';
         setTagSelection(tag, definition.color, selected);
         tag.addEventListener('click', function handleClick() {
-          toggleTag(key, item, definition.color);
+          toggleTag(key, item);
         });
         container.appendChild(tag);
       });
@@ -153,7 +199,7 @@
     state.translatedText = '';
     renderTranslatedText('');
     if (shouldPersist !== false) {
-      persistState();
+      persistPromptState();
     }
   }
 
@@ -161,7 +207,7 @@
     state.sentenceText = '';
     renderSentenceText('');
     if (shouldPersist !== false) {
-      persistState();
+      persistPromptState();
     }
   }
 
@@ -170,7 +216,7 @@
     dom.promptOutput.value = state.promptOutput;
     clearSentenceText(false);
     clearTranslatedText(false);
-    persistState();
+    persistPromptState();
   }
 
   function toggleTag(key, value) {
@@ -227,13 +273,13 @@
     if (!englishPrompt) {
       state.translatedText = '';
       renderTranslatedText('선택한 태그를 기준으로만 영문 프롬프트를 생성할 수 있습니다.');
-      persistState();
+      persistPromptState();
       return;
     }
 
     state.translatedText = englishPrompt;
     renderTranslatedText(englishPrompt);
-    persistState();
+    persistPromptState();
   }
 
   function handleSentenceCompose() {
@@ -245,14 +291,14 @@
     state.promptOutput = prompt;
     state.sentenceText = coreModule.buildSentencePrompt(state.selections, prompt);
     renderSentenceText(state.sentenceText);
-    persistState();
+    persistPromptState();
   }
 
   function handlePromptInput() {
     state.promptOutput = dom.promptOutput.value;
     clearSentenceText(false);
     clearTranslatedText(false);
-    persistState();
+    persistPromptState();
   }
 
   function handleClearAll() {
@@ -267,7 +313,75 @@
     storageModule.clearState();
   }
 
+  function hideLoginError() {
+    dom.loginError.classList.add('is-hidden');
+  }
+
+  function showLoginError() {
+    dom.loginError.classList.remove('is-hidden');
+  }
+
+  function renderUserBadges() {
+    const label = state.currentUser ? state.currentUser.name : '';
+    dom.dashboardUserBadge.textContent = label;
+    dom.builderUserBadge.textContent = label;
+  }
+
+  function setScreen(screenName) {
+    state.currentScreen = screenName;
+    dom.loginScreen.classList.toggle('is-hidden', screenName !== 'login');
+    dom.dashboardScreen.classList.toggle('is-hidden', screenName !== 'dashboard');
+    dom.promptBuilderScreen.classList.toggle('is-hidden', screenName !== 'prompt-builder');
+  }
+
+  function showDashboard() {
+    setScreen('dashboard');
+  }
+
+  function showPromptBuilder() {
+    setScreen('prompt-builder');
+  }
+
+  function showLogin() {
+    setScreen('login');
+  }
+
+  function handleLoginSubmit(event) {
+    event.preventDefault();
+
+    const email = dom.emailInput.value.trim().toLowerCase();
+    const password = dom.passwordInput.value;
+
+    if (email !== DEMO_USER.email || password !== DEMO_USER.password) {
+      showLoginError();
+      return;
+    }
+
+    hideLoginError();
+    state.currentUser = {
+      email: DEMO_USER.email,
+      name: DEMO_USER.name,
+    };
+    persistSession();
+    renderUserBadges();
+    showDashboard();
+  }
+
+  function handleLogout() {
+    state.currentUser = null;
+    persistSession();
+    renderUserBadges();
+    dom.loginForm.reset();
+    hideLoginError();
+    showLogin();
+  }
+
   function bindEvents() {
+    dom.loginForm.addEventListener('submit', handleLoginSubmit);
+    dom.dashboardLogoutBtn.addEventListener('click', handleLogout);
+    dom.builderLogoutBtn.addEventListener('click', handleLogout);
+    dom.openPromptBuilderBtn.addEventListener('click', showPromptBuilder);
+    dom.backToDashboardBtn.addEventListener('click', showDashboard);
     dom.sentenceBtn.addEventListener('click', handleSentenceCompose);
     dom.translateBtn.addEventListener('click', handleTranslate);
     dom.clearBtn.addEventListener('click', handleClearAll);
@@ -281,6 +395,8 @@
       copyText(dom.translatedBox.textContent.trim(), '영문 프롬프트 복사됨');
     });
     dom.promptOutput.addEventListener('input', handlePromptInput);
+    dom.emailInput.addEventListener('input', hideLoginError);
+    dom.passwordInput.addEventListener('input', hideLoginError);
   }
 
   function initializePromptOutput() {
@@ -289,15 +405,27 @@
     dom.promptOutput.value = state.promptOutput;
     renderSentenceText(state.sentenceText);
     renderTranslatedText(state.translatedText);
-    persistState();
+    persistPromptState();
+  }
+
+  function initializeScreen() {
+    renderUserBadges();
+    if (state.currentUser) {
+      showDashboard();
+      return;
+    }
+
+    showLogin();
   }
 
   function init() {
     cacheDom();
-    restoreState();
+    restorePromptState();
+    restoreSession();
     renderTagGroups();
     initializePromptOutput();
     bindEvents();
+    initializeScreen();
   }
 
   documentRef.addEventListener('DOMContentLoaded', init);

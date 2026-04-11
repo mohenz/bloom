@@ -3,157 +3,266 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>프롬프트 생성기</title>
+<title>Bloom Service</title>
 <link rel="stylesheet" href="./prompt-generator/styles/app.css">
 </head>
 <body>
 
-<div class="header">
-  <h1>✦ PROMPT BUILDER</h1>
-  <p>인물·의상·장소·분위기를 선택해 이미지 생성 프롬프트를 만드세요</p>
-</div>
+<div class="service-shell">
+  <section class="screen login-screen" id="loginScreen">
+    <div class="login-panel">
+      <div class="login-brand">
+        <p class="topbar-kicker">BLOOM SERVICE</p>
+        <h1>로그인 기반 프롬프트 서비스</h1>
+        <p>도구를 모아두는 메인 화면과 개별 프로그램 화면을 분리한 구조입니다.</p>
+      </div>
 
-<div class="layout">
-  <div class="section">
-    <div class="section-title"><span class="dot"></span> 인물 기본</div>
-    <div class="grid-2">
+      <div class="login-card">
+        <div class="section-title"><span class="dot"></span> 로그인</div>
+        <form class="login-form" id="loginForm">
+          <label class="form-label" for="emailInput">이메일</label>
+          <input class="form-input" id="emailInput" name="email" type="email" autocomplete="username" placeholder="admin@bloom.local" required>
+
+          <label class="form-label" for="passwordInput">비밀번호</label>
+          <input class="form-input" id="passwordInput" name="password" type="password" autocomplete="current-password" placeholder="bloom1234" required>
+
+          <p class="form-help">현재는 데모 로그인입니다. 이후 실제 인증 API로 교체할 수 있습니다.</p>
+          <p class="form-error is-hidden" id="loginError">이메일 또는 비밀번호가 올바르지 않습니다.</p>
+
+          <button class="btn btn-login" type="submit">로그인</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <section class="screen dashboard-screen is-hidden" id="dashboardScreen">
+    <header class="service-topbar">
       <div>
-        <div class="sub-label">성별</div>
-        <div class="tag-group" id="gender"></div>
-        <div class="sub-label">나이대</div>
-        <div class="tag-group" id="age"></div>
+        <p class="topbar-kicker">BLOOM HOME</p>
+        <h1>메인 화면</h1>
       </div>
-      <div>
-        <div class="sub-label">국적/인종</div>
-        <div class="tag-group" id="ethnicity"></div>
-        <div class="sub-label">인원</div>
-        <div class="tag-group" id="count"></div>
+      <div class="topbar-actions">
+        <span class="user-badge" id="dashboardUserBadge"></span>
+        <button class="btn btn-ghost" id="dashboardLogoutBtn" type="button">로그아웃</button>
+      </div>
+    </header>
+
+    <main class="dashboard-main">
+      <section class="dashboard-hero">
+        <div>
+          <p class="hero-kicker">PROGRAM HUB</p>
+          <h2>추가되는 프로그램을 연결하는 진입 화면</h2>
+          <p>각 도구는 독립 화면으로 분리하고, 메인에서는 메뉴와 링크만 제공합니다.</p>
+        </div>
+        <div class="hero-summary">
+          <div class="summary-card">
+            <span>활성 도구</span>
+            <strong>1</strong>
+          </div>
+          <div class="summary-card">
+            <span>예정 도구</span>
+            <strong>3</strong>
+          </div>
+        </div>
+      </section>
+
+      <section class="menu-grid">
+        <article class="menu-card menu-card-active">
+          <div class="menu-status">ACTIVE</div>
+          <h3>Prompt Builder</h3>
+          <p>인물 이미지 프롬프트를 조합하고 문장형/영문 결과를 생성합니다.</p>
+          <div class="menu-meta">현재 서비스에 연결된 첫 번째 프로그램</div>
+          <button class="btn btn-menu" id="openPromptBuilderBtn" type="button">열기</button>
+        </article>
+
+        <article class="menu-card">
+          <div class="menu-status">COMING SOON</div>
+          <h3>Scene Library</h3>
+          <p>장면 프리셋과 배경 구성을 탐색하는 프로그램 자리입니다.</p>
+          <div class="menu-meta">메뉴 연결 전용 카드</div>
+          <button class="btn btn-menu-disabled" type="button" disabled>준비 중</button>
+        </article>
+
+        <article class="menu-card">
+          <div class="menu-status">COMING SOON</div>
+          <h3>Prompt History</h3>
+          <p>생성 이력과 즐겨찾기 프롬프트를 조회하는 프로그램 자리입니다.</p>
+          <div class="menu-meta">로그인 기반 확장 예정</div>
+          <button class="btn btn-menu-disabled" type="button" disabled>준비 중</button>
+        </article>
+
+        <article class="menu-card">
+          <div class="menu-status">COMING SOON</div>
+          <h3>Team Templates</h3>
+          <p>팀이 공유하는 템플릿과 스타일 규칙을 모아두는 프로그램 자리입니다.</p>
+          <div class="menu-meta">협업 기능 확장 예정</div>
+          <button class="btn btn-menu-disabled" type="button" disabled>준비 중</button>
+        </article>
+      </section>
+    </main>
+  </section>
+
+  <section class="screen prompt-builder-screen is-hidden" id="promptBuilderScreen">
+    <header class="service-topbar tool-header">
+      <div class="tool-header-main">
+        <p class="topbar-kicker">PROGRAM</p>
+        <h1>Prompt Builder</h1>
+      </div>
+      <div class="tool-header-actions">
+        <button class="btn btn-ghost" id="backToDashboardBtn" type="button">메인으로</button>
+        <span class="user-badge" id="builderUserBadge"></span>
+        <button class="btn btn-ghost" id="builderLogoutBtn" type="button">로그아웃</button>
+      </div>
+    </header>
+
+    <div class="header">
+      <h1>✦ PROMPT BUILDER</h1>
+      <p>인물·의상·장소·분위기를 선택해 이미지 생성 프롬프트를 만드세요</p>
+    </div>
+
+    <div class="layout">
+      <div class="section">
+        <div class="section-title"><span class="dot"></span> 인물 기본</div>
+        <div class="grid-2">
+          <div>
+            <div class="sub-label">성별</div>
+            <div class="tag-group" id="gender"></div>
+            <div class="sub-label">나이대</div>
+            <div class="tag-group" id="age"></div>
+          </div>
+          <div>
+            <div class="sub-label">국적/인종</div>
+            <div class="tag-group" id="ethnicity"></div>
+            <div class="sub-label">인원</div>
+            <div class="tag-group" id="count"></div>
+          </div>
+        </div>
+      </div>
+      <div class="divider"></div>
+
+      <div class="section">
+        <div class="section-title"><span class="dot g"></span> 헤어스타일</div>
+        <div class="sub-label">길이</div>
+        <div class="tag-group" id="hair-length"></div>
+        <div class="sub-label">스타일</div>
+        <div class="tag-group" id="hair-style"></div>
+        <div class="sub-label">색상</div>
+        <div class="tag-group" id="hair-color"></div>
+      </div>
+      <div class="divider"></div>
+
+      <div class="section">
+        <div class="section-title"><span class="dot g"></span> 얼굴 & 표정</div>
+        <div class="sub-label">얼굴형</div>
+        <div class="tag-group" id="face-shape"></div>
+        <div class="sub-label">인상</div>
+        <div class="tag-group" id="face-impression"></div>
+        <div class="sub-label">표정</div>
+        <div class="tag-group" id="expression"></div>
+        <div class="sub-label">눈 타입</div>
+        <div class="tag-group" id="eyes"></div>
+      </div>
+      <div class="divider"></div>
+
+      <div class="section">
+        <div class="section-title"><span class="dot b"></span> 체형 & 신체</div>
+        <div class="sub-label">전체 체형</div>
+        <div class="tag-group" id="body-type"></div>
+        <div class="sub-label">키</div>
+        <div class="tag-group" id="height"></div>
+        <div class="sub-label">피부 톤</div>
+        <div class="tag-group" id="skin"></div>
+      </div>
+      <div class="divider"></div>
+
+      <div class="section">
+        <div class="section-title"><span class="dot"></span> 의상</div>
+        <div class="sub-label">상의</div>
+        <div class="tag-group" id="top"></div>
+        <div class="sub-label">하의</div>
+        <div class="tag-group" id="bottom"></div>
+        <div class="sub-label">전체/아우터</div>
+        <div class="tag-group" id="outfit"></div>
+        <div class="sub-label">신발</div>
+        <div class="tag-group" id="shoes"></div>
+        <div class="sub-label">액세서리</div>
+        <div class="tag-group" id="accessories"></div>
+      </div>
+      <div class="divider"></div>
+
+      <div class="section">
+        <div class="section-title"><span class="dot g"></span> 장소 & 배경</div>
+        <div class="sub-label">실내</div>
+        <div class="tag-group" id="location-indoor"></div>
+        <div class="sub-label">실외</div>
+        <div class="tag-group" id="location-outdoor"></div>
+        <div class="sub-label">특수 배경</div>
+        <div class="tag-group" id="location-special"></div>
+      </div>
+      <div class="divider"></div>
+
+      <div class="section">
+        <div class="section-title"><span class="dot b"></span> 분위기 & 조명</div>
+        <div class="sub-label">분위기</div>
+        <div class="tag-group" id="mood"></div>
+        <div class="sub-label">조명</div>
+        <div class="tag-group" id="lighting"></div>
+        <div class="sub-label">시간대</div>
+        <div class="tag-group" id="time"></div>
+        <div class="sub-label">날씨/계절</div>
+        <div class="tag-group" id="weather"></div>
+      </div>
+      <div class="divider"></div>
+
+      <div class="section">
+        <div class="section-title"><span class="dot"></span> 행동 & 포즈</div>
+        <div class="sub-label">포즈</div>
+        <div class="tag-group" id="pose"></div>
+        <div class="sub-label">행동</div>
+        <div class="tag-group" id="action"></div>
+      </div>
+      <div class="divider"></div>
+
+      <div class="section builder-last-section">
+        <div class="section-title"><span class="dot g"></span> 촬영 & 구도</div>
+        <div class="sub-label">구도</div>
+        <div class="tag-group" id="shot"></div>
+        <div class="sub-label">스타일</div>
+        <div class="tag-group" id="style"></div>
+        <div class="sub-label">품질</div>
+        <div class="tag-group" id="quality"></div>
       </div>
     </div>
-  </div>
-  <div class="divider"></div>
 
-  <div class="section">
-    <div class="section-title"><span class="dot g"></span> 헤어스타일</div>
-    <div class="sub-label">길이</div>
-    <div class="tag-group" id="hair-length"></div>
-    <div class="sub-label">스타일</div>
-    <div class="tag-group" id="hair-style"></div>
-    <div class="sub-label">색상</div>
-    <div class="tag-group" id="hair-color"></div>
-  </div>
-  <div class="divider"></div>
-
-  <div class="section">
-    <div class="section-title"><span class="dot g"></span> 얼굴 & 표정</div>
-    <div class="sub-label">얼굴형</div>
-    <div class="tag-group" id="face-shape"></div>
-    <div class="sub-label">인상</div>
-    <div class="tag-group" id="face-impression"></div>
-    <div class="sub-label">표정</div>
-    <div class="tag-group" id="expression"></div>
-    <div class="sub-label">눈 타입</div>
-    <div class="tag-group" id="eyes"></div>
-  </div>
-  <div class="divider"></div>
-
-  <div class="section">
-    <div class="section-title"><span class="dot b"></span> 체형 & 신체</div>
-    <div class="sub-label">전체 체형</div>
-    <div class="tag-group" id="body-type"></div>
-    <div class="sub-label">키</div>
-    <div class="tag-group" id="height"></div>
-    <div class="sub-label">피부 톤</div>
-    <div class="tag-group" id="skin"></div>
-  </div>
-  <div class="divider"></div>
-
-  <div class="section">
-    <div class="section-title"><span class="dot"></span> 의상</div>
-    <div class="sub-label">상의</div>
-    <div class="tag-group" id="top"></div>
-    <div class="sub-label">하의</div>
-    <div class="tag-group" id="bottom"></div>
-    <div class="sub-label">전체/아우터</div>
-    <div class="tag-group" id="outfit"></div>
-    <div class="sub-label">신발</div>
-    <div class="tag-group" id="shoes"></div>
-    <div class="sub-label">액세서리</div>
-    <div class="tag-group" id="accessories"></div>
-  </div>
-  <div class="divider"></div>
-
-  <div class="section">
-    <div class="section-title"><span class="dot g"></span> 장소 & 배경</div>
-    <div class="sub-label">실내</div>
-    <div class="tag-group" id="location-indoor"></div>
-    <div class="sub-label">실외</div>
-    <div class="tag-group" id="location-outdoor"></div>
-    <div class="sub-label">특수 배경</div>
-    <div class="tag-group" id="location-special"></div>
-  </div>
-  <div class="divider"></div>
-
-  <div class="section">
-    <div class="section-title"><span class="dot b"></span> 분위기 & 조명</div>
-    <div class="sub-label">분위기</div>
-    <div class="tag-group" id="mood"></div>
-    <div class="sub-label">조명</div>
-    <div class="tag-group" id="lighting"></div>
-    <div class="sub-label">시간대</div>
-    <div class="tag-group" id="time"></div>
-    <div class="sub-label">날씨/계절</div>
-    <div class="tag-group" id="weather"></div>
-  </div>
-  <div class="divider"></div>
-
-  <div class="section">
-    <div class="section-title"><span class="dot"></span> 행동 & 포즈</div>
-    <div class="sub-label">포즈</div>
-    <div class="tag-group" id="pose"></div>
-    <div class="sub-label">행동</div>
-    <div class="tag-group" id="action"></div>
-  </div>
-  <div class="divider"></div>
-
-  <div class="section" style="margin-bottom: 180px;">
-    <div class="section-title"><span class="dot g"></span> 촬영 & 구도</div>
-    <div class="sub-label">구도</div>
-    <div class="tag-group" id="shot"></div>
-    <div class="sub-label">스타일</div>
-    <div class="tag-group" id="style"></div>
-    <div class="sub-label">품질</div>
-    <div class="tag-group" id="quality"></div>
-  </div>
-</div>
-
-<div class="prompt-box-wrapper">
-  <div class="prompt-box">
-    <div class="prompt-label-row">
-      <span class="prompt-label">▸ 한글 PROMPT</span>
-      <div class="btn-row">
-        <button class="btn btn-clear" id="clearBtn" type="button">초기화</button>
-        <button class="btn btn-sentence" id="sentenceBtn" type="button">문장 연결</button>
-        <button class="btn btn-translate" id="translateBtn" type="button">EN 생성</button>
-        <button class="btn btn-copy" id="copyKoreanBtn" type="button">한글 복사</button>
+    <div class="prompt-box-wrapper">
+      <div class="prompt-box">
+        <div class="prompt-label-row">
+          <span class="prompt-label">▸ 한글 PROMPT</span>
+          <div class="btn-row">
+            <button class="btn btn-clear" id="clearBtn" type="button">초기화</button>
+            <button class="btn btn-sentence" id="sentenceBtn" type="button">문장 연결</button>
+            <button class="btn btn-translate" id="translateBtn" type="button">EN 생성</button>
+            <button class="btn btn-copy" id="copyKoreanBtn" type="button">한글 복사</button>
+          </div>
+        </div>
+        <textarea class="prompt-textarea" id="promptOutput" placeholder="위에서 옵션을 선택하면 프롬프트가 자동 생성됩니다..." rows="3"></textarea>
+        <div id="sentenceWrapper" style="display:none;">
+          <div class="prompt-label-row" style="margin-top:10px; margin-bottom:6px;">
+            <span class="prompt-label" style="color:var(--accent2);">▸ 문장형 PROMPT</span>
+            <button class="btn btn-copy-sentence" id="copySentenceBtn" type="button">문장 복사</button>
+          </div>
+          <div class="sentence-box visible" id="sentenceBox"></div>
+        </div>
+        <div id="translatedWrapper" style="display:none;">
+          <div class="prompt-label-row" style="margin-top:10px; margin-bottom:6px;">
+            <span class="prompt-label" style="color:var(--accent3);">▸ EN PROMPT</span>
+            <button class="btn btn-copy-en" id="copyEnglishBtn" type="button">영문 복사</button>
+          </div>
+          <div class="translated-box visible" id="translatedBox"></div>
+        </div>
       </div>
     </div>
-    <textarea class="prompt-textarea" id="promptOutput" placeholder="위에서 옵션을 선택하면 프롬프트가 자동 생성됩니다..." rows="3"></textarea>
-    <div id="sentenceWrapper" style="display:none;">
-      <div class="prompt-label-row" style="margin-top:10px; margin-bottom:6px;">
-        <span class="prompt-label" style="color:var(--accent2);">▸ 문장형 PROMPT</span>
-        <button class="btn btn-copy-sentence" id="copySentenceBtn" type="button">문장 복사</button>
-      </div>
-      <div class="sentence-box visible" id="sentenceBox"></div>
-    </div>
-    <div id="translatedWrapper" style="display:none;">
-      <div class="prompt-label-row" style="margin-top:10px; margin-bottom:6px;">
-        <span class="prompt-label" style="color:var(--accent3);">▸ EN PROMPT</span>
-        <button class="btn btn-copy-en" id="copyEnglishBtn" type="button">영문 복사</button>
-      </div>
-      <div class="translated-box visible" id="translatedBox"></div>
-    </div>
-  </div>
+  </section>
 </div>
 
 <div class="copy-toast" id="copyToast">✓ 복사됨</div>

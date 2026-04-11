@@ -1,9 +1,10 @@
 (function registerPromptGeneratorStorage(global) {
-  const STORAGE_KEY = 'prompt-generator-state-v1';
+  const STATE_STORAGE_KEY = 'prompt-generator-state-v1';
+  const SESSION_STORAGE_KEY = 'bloom-service-session-v1';
 
-  function loadState() {
+  function loadJson(key) {
     try {
-      const rawValue = global.localStorage.getItem(STORAGE_KEY);
+      const rawValue = global.localStorage.getItem(key);
       if (!rawValue) {
         return null;
       }
@@ -13,27 +14,54 @@
     }
   }
 
-  function saveState(state) {
+  function saveJson(key, value) {
     try {
-      global.localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      global.localStorage.setItem(key, JSON.stringify(value));
     } catch (error) {
       return false;
     }
     return true;
   }
 
-  function clearState() {
+  function removeValue(key) {
     try {
-      global.localStorage.removeItem(STORAGE_KEY);
+      global.localStorage.removeItem(key);
     } catch (error) {
       return false;
     }
     return true;
+  }
+
+  function loadState() {
+    return loadJson(STATE_STORAGE_KEY);
+  }
+
+  function saveState(state) {
+    return saveJson(STATE_STORAGE_KEY, state);
+  }
+
+  function clearState() {
+    return removeValue(STATE_STORAGE_KEY);
+  }
+
+  function loadSession() {
+    return loadJson(SESSION_STORAGE_KEY);
+  }
+
+  function saveSession(session) {
+    return saveJson(SESSION_STORAGE_KEY, session);
+  }
+
+  function clearSession() {
+    return removeValue(SESSION_STORAGE_KEY);
   }
 
   global.PromptGeneratorStorage = {
     loadState,
     saveState,
     clearState,
+    loadSession,
+    saveSession,
+    clearSession,
   };
 })(window);
