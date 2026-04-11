@@ -142,7 +142,7 @@
     if (shot) cameraParts.push(shot + ' 구도');
     if (style) cameraParts.push(style);
     if (quality) cameraParts.push(quality);
-    if (aspectRatio) cameraParts.push(aspectRatio + ' 비율');
+    if (aspectRatio) cameraParts.push(aspectRatio + ' 해상도');
     if (cameraParts.length) parts.push(cameraParts.join(', '));
 
     return parts.join(', ');
@@ -310,7 +310,7 @@
     if (shots.length) cameraDetails.push(formatList(shots) + ' 구도');
     if (styles.length) cameraDetails.push(formatList(styles) + ' 스타일');
     if (qualities.length) cameraDetails.push(formatList(qualities) + ' 품질');
-    if (aspectRatios.length) cameraDetails.push(formatList(aspectRatios) + ' 비율');
+    if (aspectRatios.length) cameraDetails.push(formatList(aspectRatios) + ' 해상도');
     if (cameraDetails.length) {
       sentences.push('최종 출력은 ' + formatList(cameraDetails) + '로 마무리합니다.');
     }
