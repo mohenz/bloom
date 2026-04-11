@@ -138,9 +138,11 @@
     const shot = joinSelections(selections, 'shot');
     const style = joinSelections(selections, 'style');
     const quality = joinSelections(selections, 'quality');
+    const aspectRatio = joinSelections(selections, 'aspect-ratio');
     if (shot) cameraParts.push(shot + ' 구도');
     if (style) cameraParts.push(style);
     if (quality) cameraParts.push(quality);
+    if (aspectRatio) cameraParts.push(aspectRatio + ' 비율');
     if (cameraParts.length) parts.push(cameraParts.join(', '));
 
     return parts.join(', ');
@@ -195,7 +197,8 @@
       .concat(translateSelections(selections, 'action'))
       .concat(translateSelections(selections, 'shot'))
       .concat(translateSelections(selections, 'style'))
-      .concat(translateSelections(selections, 'quality'));
+      .concat(translateSelections(selections, 'quality'))
+      .concat(translateSelections(selections, 'aspect-ratio'));
     if (sceneParts.length) parts.push(sceneParts.join(', '));
 
     return parts.join(', ');
@@ -303,9 +306,11 @@
     const shots = getSelections(selections, 'shot');
     const styles = getSelections(selections, 'style');
     const qualities = getSelections(selections, 'quality');
+    const aspectRatios = getSelections(selections, 'aspect-ratio');
     if (shots.length) cameraDetails.push(formatList(shots) + ' 구도');
     if (styles.length) cameraDetails.push(formatList(styles) + ' 스타일');
     if (qualities.length) cameraDetails.push(formatList(qualities) + ' 품질');
+    if (aspectRatios.length) cameraDetails.push(formatList(aspectRatios) + ' 비율');
     if (cameraDetails.length) {
       sentences.push('최종 출력은 ' + formatList(cameraDetails) + '로 마무리합니다.');
     }

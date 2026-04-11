@@ -30,23 +30,19 @@
     action: { color: null, items: ['책 읽기', '커피 마시기', '스마트폰 보기', '춤추기', '음악 듣기', '사진 찍기', '음식 먹기', '운동하기', '글 쓰기', '창 밖 보기', '거울 보기', '대화하기'] },
     shot: { color: 'pink', items: ['클로즈업', '얼굴 중심', '상반신', '전신', '원거리', '버즈아이뷰 (위에서)', '로우앵글 (아래서)', '사이드뷰'] },
     style: { color: 'pink', items: ['사실적 포토', '애니메이션 스타일', '수채화', '오일페인팅', '시네마틱', '패션화보', '만화풍', 'DSLR 인물사진', '필름 느낌', '디지털 아트', '3D 렌더링'] },
-    quality: {
+    quality: { color: 'pink', items: ['UHD', '8K', 'Original Photo', 'ultra-realistic photo'] },
+    'aspect-ratio': {
       color: 'pink',
       items: [
-        'HD',
-        'Full HD',
-        '2K',
-        '4K',
-        '5K',
-        '6K',
-        'UHD',
-        '8K',
-        '12K',
-        '16K',
-        'high resolution',
-        'super high resolution',
-        'Original Photo',
-        'ultra-realistic photo',
+        '1:1 정사각형',
+        '4:5 세로',
+        '3:4 세로',
+        '2:3 세로',
+        '9:16 세로',
+        '16:9 가로',
+        '3:2 가로',
+        '4:3 가로',
+        '21:9 와이드',
       ],
     },
   };
@@ -390,24 +386,25 @@
       '3D 렌더링': '3D rendering',
     },
     quality: {
-      'HD': 'HD',
-      'Full HD': 'Full HD',
-      '2K': '2K',
-      '4K': '4K',
-      '5K': '5K',
-      '6K': '6K',
       'UHD': 'UHD',
       '8K': '8K',
-      '12K': '12K',
-      '16K': '16K',
-      'high resolution': 'high resolution',
-      'super high resolution': 'super high resolution',
       'Original Photo': 'Original Photo',
       'ultra-realistic photo': 'ultra-realistic photo',
     },
+    'aspect-ratio': {
+      '1:1 정사각형': 'aspect ratio 1:1',
+      '4:5 세로': 'aspect ratio 4:5',
+      '3:4 세로': 'aspect ratio 3:4',
+      '2:3 세로': 'aspect ratio 2:3',
+      '9:16 세로': 'aspect ratio 9:16',
+      '16:9 가로': 'aspect ratio 16:9',
+      '3:2 가로': 'aspect ratio 3:2',
+      '4:3 가로': 'aspect ratio 4:3',
+      '21:9 와이드': 'aspect ratio 21:9',
+    },
   };
 
-  const SINGLE_SELECT_KEYS = ['gender', 'count', 'hair-length', 'height', 'shot'];
+  const SINGLE_SELECT_KEYS = ['gender', 'count', 'hair-length', 'height', 'shot', 'aspect-ratio'];
 
   global.PromptGeneratorData = {
     DATA,
