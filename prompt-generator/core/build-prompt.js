@@ -1,4 +1,7 @@
 (function registerPromptGeneratorCore(global) {
+  const dataModule = global.PromptGeneratorData || {};
+  const EN_LABELS = dataModule.EN_LABELS || {};
+
   function joinSelections(selections, key) {
     return (selections[key] || []).join(', ');
   }
@@ -34,6 +37,15 @@
     return Object.keys(selections).some(function hasSelectedValue(key) {
       return Array.isArray(selections[key]) && selections[key].length > 0;
     });
+  }
+
+  function translateSelections(selections, key) {
+    const labelMap = EN_LABELS[key] || {};
+    return getSelections(selections, key)
+      .map(function mapLabel(value) {
+        return labelMap[value] || '';
+      })
+      .filter(Boolean);
   }
 
   function buildPrompt(selections) {
@@ -128,6 +140,60 @@
     if (shot) cameraParts.push(shot + ' 구도');
     if (style) cameraParts.push(style);
     if (cameraParts.length) parts.push(cameraParts.join(', '));
+
+    return parts.join(', ');
+  }
+
+  function buildEnglishPrompt(selections) {
+    const parts = [];
+
+    const subjectParts = []
+      .concat(translateSelections(selections, 'count'))
+      .concat(translateSelections(selections, 'ethnicity'))
+      .concat(translateSelections(selections, 'age'))
+      .concat(translateSelections(selections, 'gender'));
+    if (subjectParts.length) parts.push(subjectParts.join(', '));
+
+    const hairParts = []
+      .concat(translateSelections(selections, 'hair-color'))
+      .concat(translateSelections(selections, 'hair-length'))
+      .concat(translateSelections(selections, 'hair-style'));
+    if (hairParts.length) parts.push(hairParts.join(', '));
+
+    const faceParts = []
+      .concat(translateSelections(selections, 'face-shape'))
+      .concat(translateSelections(selections, 'face-impression'))
+      .concat(translateSelections(selections, 'eyes'))
+      .concat(translateSelections(selections, 'expression'));
+    if (faceParts.length) parts.push(faceParts.join(', '));
+
+    const bodyParts = []
+      .concat(translateSelections(selections, 'body-type'))
+      .concat(translateSelections(selections, 'height'))
+      .concat(translateSelections(selections, 'skin'));
+    if (bodyParts.length) parts.push(bodyParts.join(', '));
+
+    const outfitParts = []
+      .concat(translateSelections(selections, 'outfit'))
+      .concat(translateSelections(selections, 'top'))
+      .concat(translateSelections(selections, 'bottom'))
+      .concat(translateSelections(selections, 'shoes'))
+      .concat(translateSelections(selections, 'accessories'));
+    if (outfitParts.length) parts.push(outfitParts.join(', '));
+
+    const sceneParts = []
+      .concat(translateSelections(selections, 'location-indoor'))
+      .concat(translateSelections(selections, 'location-outdoor'))
+      .concat(translateSelections(selections, 'location-special'))
+      .concat(translateSelections(selections, 'time'))
+      .concat(translateSelections(selections, 'weather'))
+      .concat(translateSelections(selections, 'mood'))
+      .concat(translateSelections(selections, 'lighting'))
+      .concat(translateSelections(selections, 'pose'))
+      .concat(translateSelections(selections, 'action'))
+      .concat(translateSelections(selections, 'shot'))
+      .concat(translateSelections(selections, 'style'));
+    if (sceneParts.length) parts.push(sceneParts.join(', '));
 
     return parts.join(', ');
   }
@@ -244,6 +310,7 @@
 
   global.PromptGeneratorCore = {
     buildPrompt,
+    buildEnglishPrompt,
     buildSentencePrompt,
   };
 })(window);

@@ -1,10 +1,9 @@
 (function bootstrapPromptGenerator(global, documentRef) {
   const dataModule = global.PromptGeneratorData;
   const coreModule = global.PromptGeneratorCore;
-  const serviceModule = global.PromptGeneratorServices;
   const storageModule = global.PromptGeneratorStorage;
 
-  if (!dataModule || !coreModule || !serviceModule || !storageModule) {
+  if (!dataModule || !coreModule || !storageModule) {
     return;
   }
 
@@ -223,33 +222,18 @@
     }, 2000);
   }
 
-  function setTranslateLoading(isLoading) {
-    dom.translateBtn.disabled = isLoading;
-    dom.translateBtn.innerHTML = isLoading
-      ? '<span class="loading-dots"><span></span><span></span><span></span></span>'
-      : 'EN 번역';
-  }
-
-  async function handleTranslate() {
-    const prompt = dom.promptOutput.value.trim();
-    if (!prompt) {
+  function handleTranslate() {
+    const englishPrompt = coreModule.buildEnglishPrompt(state.selections);
+    if (!englishPrompt) {
+      state.translatedText = '';
+      renderTranslatedText('선택한 태그를 기준으로만 영문 프롬프트를 생성할 수 있습니다.');
+      persistState();
       return;
     }
 
-    setTranslateLoading(true);
-    try {
-      const translatedText = await serviceModule.translatePromptToEnglish(prompt);
-      state.promptOutput = prompt;
-      state.translatedText = translatedText;
-      renderTranslatedText(translatedText);
-      persistState();
-    } catch (error) {
-      state.translatedText = '';
-      persistState();
-      renderTranslatedText(error.message || '번역 중 오류가 발생했습니다.');
-    } finally {
-      setTranslateLoading(false);
-    }
+    state.translatedText = englishPrompt;
+    renderTranslatedText(englishPrompt);
+    persistState();
   }
 
   function handleSentenceCompose() {
