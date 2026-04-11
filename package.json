@@ -1,0 +1,9 @@
+{
+  "name": "bloom-prompt-generator",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "start:api": "node server/translate-api.mjs"
+  }
+}
