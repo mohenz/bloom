@@ -14,6 +14,14 @@
     password: 'bloom1234',
     name: 'Bloom Admin',
   };
+  const NEGATIVE_PROMPT = [
+    '(worst quality, low quality:1.4), mutated hands, malformed limbs, deformed fingers, extra fingers,',
+    'missing fingers, fused fingers, too many fingers, long neck, bad anatomy, disfigured, poorly drawn face,',
+    'mutated face, cloned face, extra limbs, missing limbs, gross proportions, malformed hands, distorted hands,',
+    'broken legs, backward limbs, floating limbs, disconnected limbs, asymmetrical eyes, cross-eyed, deformed pupils,',
+    'cataracts, blurry eyes, missing eyelashes, weird eyes, extra pupils, faded colors, low resolution, distorted iris, bloodshot eyes,',
+    '(anime, cartoon), illustration, painting, 3d render, watermark, text, out of frame, blurry, grainy',
+  ].join('\n');
 
   const state = {
     currentScreen: 'login',
@@ -76,6 +84,8 @@
     dom.copyKoreanBtn = documentRef.getElementById('copyKoreanBtn');
     dom.copySentenceBtn = documentRef.getElementById('copySentenceBtn');
     dom.copyEnglishBtn = documentRef.getElementById('copyEnglishBtn');
+    dom.copyNegativeBtn = documentRef.getElementById('copyNegativeBtn');
+    dom.negativePromptBox = documentRef.getElementById('negativePromptBox');
     dom.copyToast = documentRef.getElementById('copyToast');
   }
 
@@ -394,6 +404,9 @@
     dom.copyEnglishBtn.addEventListener('click', function copyEnglish() {
       copyText(dom.translatedBox.textContent.trim(), '영문 프롬프트 복사됨');
     });
+    dom.copyNegativeBtn.addEventListener('click', function copyNegative() {
+      copyText(NEGATIVE_PROMPT, '네거티브 프롬프트 복사됨');
+    });
     dom.promptOutput.addEventListener('input', handlePromptInput);
     dom.emailInput.addEventListener('input', hideLoginError);
     dom.passwordInput.addEventListener('input', hideLoginError);
@@ -405,6 +418,7 @@
     dom.promptOutput.value = state.promptOutput;
     renderSentenceText(state.sentenceText);
     renderTranslatedText(state.translatedText);
+    dom.negativePromptBox.textContent = NEGATIVE_PROMPT;
     persistPromptState();
   }
 
