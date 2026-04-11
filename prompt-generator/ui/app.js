@@ -13,6 +13,7 @@
   const state = {
     selections: createEmptySelections(),
     promptOutput: '',
+    sentenceText: '',
     translatedText: '',
   };
 
@@ -45,11 +46,15 @@
 
   function cacheDom() {
     dom.promptOutput = documentRef.getElementById('promptOutput');
+    dom.sentenceWrapper = documentRef.getElementById('sentenceWrapper');
+    dom.sentenceBox = documentRef.getElementById('sentenceBox');
     dom.translatedWrapper = documentRef.getElementById('translatedWrapper');
     dom.translatedBox = documentRef.getElementById('translatedBox');
+    dom.sentenceBtn = documentRef.getElementById('sentenceBtn');
     dom.translateBtn = documentRef.getElementById('translateBtn');
     dom.clearBtn = documentRef.getElementById('clearBtn');
     dom.copyKoreanBtn = documentRef.getElementById('copyKoreanBtn');
+    dom.copySentenceBtn = documentRef.getElementById('copySentenceBtn');
     dom.copyEnglishBtn = documentRef.getElementById('copyEnglishBtn');
     dom.copyToast = documentRef.getElementById('copyToast');
   }
@@ -62,6 +67,7 @@
 
     state.selections = sanitizeSelections(savedState.selections);
     state.promptOutput = typeof savedState.promptOutput === 'string' ? savedState.promptOutput : '';
+    state.sentenceText = typeof savedState.sentenceText === 'string' ? savedState.sentenceText : '';
     state.translatedText = typeof savedState.translatedText === 'string' ? savedState.translatedText : '';
   }
 
@@ -69,6 +75,7 @@
     storageModule.saveState({
       selections: state.selections,
       promptOutput: state.promptOutput,
+      sentenceText: state.sentenceText,
       translatedText: state.translatedText,
     });
   }
@@ -132,6 +139,17 @@
     dom.translatedBox.textContent = text;
   }
 
+  function renderSentenceText(text) {
+    if (!text) {
+      dom.sentenceWrapper.style.display = 'none';
+      dom.sentenceBox.textContent = '';
+      return;
+    }
+
+    dom.sentenceWrapper.style.display = 'block';
+    dom.sentenceBox.textContent = text;
+  }
+
   function clearTranslatedText(shouldPersist) {
     state.translatedText = '';
     renderTranslatedText('');
@@ -140,9 +158,18 @@
     }
   }
 
+  function clearSentenceText(shouldPersist) {
+    state.sentenceText = '';
+    renderSentenceText('');
+    if (shouldPersist !== false) {
+      persistState();
+    }
+  }
+
   function syncPromptFromSelections() {
     state.promptOutput = coreModule.buildPrompt(state.selections);
     dom.promptOutput.value = state.promptOutput;
+    clearSentenceText(false);
     clearTranslatedText(false);
     persistState();
   }
@@ -225,8 +252,21 @@
     }
   }
 
+  function handleSentenceCompose() {
+    const prompt = dom.promptOutput.value.trim();
+    if (!prompt) {
+      return;
+    }
+
+    state.promptOutput = prompt;
+    state.sentenceText = coreModule.buildSentencePrompt(state.selections, prompt);
+    renderSentenceText(state.sentenceText);
+    persistState();
+  }
+
   function handlePromptInput() {
     state.promptOutput = dom.promptOutput.value;
+    clearSentenceText(false);
     clearTranslatedText(false);
     persistState();
   }
@@ -234,18 +274,24 @@
   function handleClearAll() {
     state.selections = createEmptySelections();
     state.promptOutput = '';
+    state.sentenceText = '';
     state.translatedText = '';
     renderTagGroups();
     dom.promptOutput.value = '';
+    renderSentenceText('');
     renderTranslatedText('');
     storageModule.clearState();
   }
 
   function bindEvents() {
+    dom.sentenceBtn.addEventListener('click', handleSentenceCompose);
     dom.translateBtn.addEventListener('click', handleTranslate);
     dom.clearBtn.addEventListener('click', handleClearAll);
     dom.copyKoreanBtn.addEventListener('click', function copyKorean() {
       copyText(dom.promptOutput.value, '한글 프롬프트 복사됨');
+    });
+    dom.copySentenceBtn.addEventListener('click', function copySentence() {
+      copyText(dom.sentenceBox.textContent.trim(), '문장형 프롬프트 복사됨');
     });
     dom.copyEnglishBtn.addEventListener('click', function copyEnglish() {
       copyText(dom.translatedBox.textContent.trim(), '영문 프롬프트 복사됨');
@@ -257,6 +303,7 @@
     const builtPrompt = coreModule.buildPrompt(state.selections);
     state.promptOutput = state.promptOutput || builtPrompt;
     dom.promptOutput.value = state.promptOutput;
+    renderSentenceText(state.sentenceText);
     renderTranslatedText(state.translatedText);
     persistState();
   }

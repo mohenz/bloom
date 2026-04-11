@@ -129,11 +129,19 @@
       <span class="prompt-label">▸ 한글 PROMPT</span>
       <div class="btn-row">
         <button class="btn btn-clear" id="clearBtn" type="button">초기화</button>
+        <button class="btn btn-sentence" id="sentenceBtn" type="button">문장 연결</button>
         <button class="btn btn-translate" id="translateBtn" type="button">EN 번역</button>
         <button class="btn btn-copy" id="copyKoreanBtn" type="button">한글 복사</button>
       </div>
     </div>
     <textarea class="prompt-textarea" id="promptOutput" placeholder="위에서 옵션을 선택하면 프롬프트가 자동 생성됩니다..." rows="3"></textarea>
+    <div id="sentenceWrapper" style="display:none;">
+      <div class="prompt-label-row" style="margin-top:10px; margin-bottom:6px;">
+        <span class="prompt-label" style="color:var(--accent2);">▸ 문장형 PROMPT</span>
+        <button class="btn btn-copy-sentence" id="copySentenceBtn" type="button">문장 복사</button>
+      </div>
+      <div class="sentence-box visible" id="sentenceBox"></div>
+    </div>
     <div id="translatedWrapper" style="display:none;">
       <div class="prompt-label-row" style="margin-top:10px; margin-bottom:6px;">
         <span class="prompt-label" style="color:var(--accent3);">▸ EN PROMPT</span>
