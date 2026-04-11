@@ -61,9 +61,11 @@
 
     const faceParts = [];
     const faceShape = joinSelections(selections, 'face-shape');
+    const faceImpression = joinSelections(selections, 'face-impression');
     const eyes = joinSelections(selections, 'eyes');
     const expression = joinSelections(selections, 'expression');
     if (faceShape) faceParts.push(faceShape + ' 얼굴형');
+    if (faceImpression) faceParts.push(faceImpression + ' 인상');
     if (eyes) faceParts.push(eyes);
     if (expression) faceParts.push(expression + ' 표정');
     if (faceParts.length) parts.push(faceParts.join(', '));
@@ -167,6 +169,8 @@
     const faceDetails = [];
     const faceShapes = getSelections(selections, 'face-shape');
     if (faceShapes.length) faceDetails.push(formatList(faceShapes) + ' 얼굴형');
+    const faceImpressions = getSelections(selections, 'face-impression');
+    if (faceImpressions.length) faceDetails.push(formatList(faceImpressions) + ' 인상');
     const eyes = getSelections(selections, 'eyes');
     if (eyes.length) faceDetails.push(formatList(eyes));
     const expressions = getSelections(selections, 'expression');
