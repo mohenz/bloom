@@ -137,8 +137,10 @@
     const cameraParts = [];
     const shot = joinSelections(selections, 'shot');
     const style = joinSelections(selections, 'style');
+    const quality = joinSelections(selections, 'quality');
     if (shot) cameraParts.push(shot + ' 구도');
     if (style) cameraParts.push(style);
+    if (quality) cameraParts.push(quality);
     if (cameraParts.length) parts.push(cameraParts.join(', '));
 
     return parts.join(', ');
@@ -192,7 +194,8 @@
       .concat(translateSelections(selections, 'pose'))
       .concat(translateSelections(selections, 'action'))
       .concat(translateSelections(selections, 'shot'))
-      .concat(translateSelections(selections, 'style'));
+      .concat(translateSelections(selections, 'style'))
+      .concat(translateSelections(selections, 'quality'));
     if (sceneParts.length) parts.push(sceneParts.join(', '));
 
     return parts.join(', ');
@@ -299,8 +302,10 @@
     const cameraDetails = [];
     const shots = getSelections(selections, 'shot');
     const styles = getSelections(selections, 'style');
+    const qualities = getSelections(selections, 'quality');
     if (shots.length) cameraDetails.push(formatList(shots) + ' 구도');
     if (styles.length) cameraDetails.push(formatList(styles) + ' 스타일');
+    if (qualities.length) cameraDetails.push(formatList(qualities) + ' 품질');
     if (cameraDetails.length) {
       sentences.push('최종 출력은 ' + formatList(cameraDetails) + '로 마무리합니다.');
     }
