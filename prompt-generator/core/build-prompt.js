@@ -16,6 +16,14 @@
     return filtered.join(', ');
   }
 
+  function formatEnglishList(values) {
+    const filtered = values.filter(Boolean);
+    if (!filtered.length) return '';
+    if (filtered.length === 1) return filtered[0];
+    if (filtered.length === 2) return filtered[0] + ' and ' + filtered[1];
+    return filtered.slice(0, -1).join(', ') + ', and ' + filtered[filtered.length - 1];
+  }
+
   function formatCount(count) {
     const countMap = {
       '1명': '한 명의',
@@ -318,9 +326,87 @@
     return sentences.join(' ');
   }
 
+  function buildEnglishSentencePrompt(selections) {
+    const sentences = [];
+
+    if (!hasAnySelections(selections)) {
+      return '';
+    }
+
+    const subjectDetails = []
+      .concat(translateSelections(selections, 'count'))
+      .concat(translateSelections(selections, 'ethnicity'))
+      .concat(translateSelections(selections, 'age'))
+      .concat(translateSelections(selections, 'gender'));
+    if (subjectDetails.length) {
+      sentences.push('Subject details include ' + formatEnglishList(subjectDetails) + '.');
+    }
+
+    const hairDetails = []
+      .concat(translateSelections(selections, 'hair-color'))
+      .concat(translateSelections(selections, 'hair-length'))
+      .concat(translateSelections(selections, 'hair-style'));
+    if (hairDetails.length) {
+      sentences.push('Hair details include ' + formatEnglishList(hairDetails) + '.');
+    }
+
+    const faceDetails = []
+      .concat(translateSelections(selections, 'face-shape'))
+      .concat(translateSelections(selections, 'face-impression'))
+      .concat(translateSelections(selections, 'eyes'))
+      .concat(translateSelections(selections, 'expression'));
+    if (faceDetails.length) {
+      sentences.push('Facial details include ' + formatEnglishList(faceDetails) + '.');
+    }
+
+    const bodyDetails = []
+      .concat(translateSelections(selections, 'body-type'))
+      .concat(translateSelections(selections, 'height'))
+      .concat(translateSelections(selections, 'skin'));
+    if (bodyDetails.length) {
+      sentences.push('Body details include ' + formatEnglishList(bodyDetails) + '.');
+    }
+
+    const wardrobeDetails = []
+      .concat(translateSelections(selections, 'outfit'))
+      .concat(translateSelections(selections, 'top'))
+      .concat(translateSelections(selections, 'bottom'))
+      .concat(translateSelections(selections, 'shoes'))
+      .concat(translateSelections(selections, 'accessories'));
+    if (wardrobeDetails.length) {
+      sentences.push('Wardrobe details include ' + formatEnglishList(wardrobeDetails) + '.');
+    }
+
+    const sceneDetails = []
+      .concat(translateSelections(selections, 'location-indoor'))
+      .concat(translateSelections(selections, 'location-outdoor'))
+      .concat(translateSelections(selections, 'location-special'))
+      .concat(translateSelections(selections, 'time'))
+      .concat(translateSelections(selections, 'weather'))
+      .concat(translateSelections(selections, 'mood'))
+      .concat(translateSelections(selections, 'lighting'))
+      .concat(translateSelections(selections, 'pose'))
+      .concat(translateSelections(selections, 'action'));
+    if (sceneDetails.length) {
+      sentences.push('Scene details include ' + formatEnglishList(sceneDetails) + '.');
+    }
+
+    const cameraDetails = []
+      .concat(translateSelections(selections, 'shot'))
+      .concat(translateSelections(selections, 'style'))
+      .concat(translateSelections(selections, 'quality'))
+      .concat(translateSelections(selections, 'aspect-ratio'));
+    if (cameraDetails.length) {
+      sentences.push('Camera details include ' + formatEnglishList(cameraDetails) + '.');
+    }
+
+    return sentences.join(' ');
+  }
+
   global.PromptGeneratorCore = {
     buildPrompt,
     buildEnglishPrompt,
     buildSentencePrompt,
+    buildEnglishSentencePrompt,
   };
 })(window);

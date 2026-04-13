@@ -30,6 +30,7 @@
     promptOutput: '',
     sentenceText: '',
     translatedText: '',
+    englishSentenceText: '',
   };
 
   const dom = {};
@@ -78,12 +79,16 @@
     dom.sentenceBox = documentRef.getElementById('sentenceBox');
     dom.translatedWrapper = documentRef.getElementById('translatedWrapper');
     dom.translatedBox = documentRef.getElementById('translatedBox');
+    dom.englishSentenceWrapper = documentRef.getElementById('englishSentenceWrapper');
+    dom.englishSentenceBox = documentRef.getElementById('englishSentenceBox');
     dom.sentenceBtn = documentRef.getElementById('sentenceBtn');
     dom.translateBtn = documentRef.getElementById('translateBtn');
+    dom.englishSentenceBtn = documentRef.getElementById('englishSentenceBtn');
     dom.clearBtn = documentRef.getElementById('clearBtn');
     dom.copyKoreanBtn = documentRef.getElementById('copyKoreanBtn');
     dom.copySentenceBtn = documentRef.getElementById('copySentenceBtn');
     dom.copyEnglishBtn = documentRef.getElementById('copyEnglishBtn');
+    dom.copyEnglishSentenceBtn = documentRef.getElementById('copyEnglishSentenceBtn');
     dom.copyNegativeBtn = documentRef.getElementById('copyNegativeBtn');
     dom.negativePromptBox = documentRef.getElementById('negativePromptBox');
     dom.copyToast = documentRef.getElementById('copyToast');
@@ -99,6 +104,7 @@
     state.promptOutput = typeof savedState.promptOutput === 'string' ? savedState.promptOutput : '';
     state.sentenceText = typeof savedState.sentenceText === 'string' ? savedState.sentenceText : '';
     state.translatedText = typeof savedState.translatedText === 'string' ? savedState.translatedText : '';
+    state.englishSentenceText = typeof savedState.englishSentenceText === 'string' ? savedState.englishSentenceText : '';
   }
 
   function restoreSession() {
@@ -120,6 +126,7 @@
       promptOutput: state.promptOutput,
       sentenceText: state.sentenceText,
       translatedText: state.translatedText,
+      englishSentenceText: state.englishSentenceText,
     });
   }
 
@@ -205,6 +212,17 @@
     dom.sentenceBox.textContent = text;
   }
 
+  function renderEnglishSentenceText(text) {
+    if (!text) {
+      dom.englishSentenceWrapper.style.display = 'none';
+      dom.englishSentenceBox.textContent = '';
+      return;
+    }
+
+    dom.englishSentenceWrapper.style.display = 'block';
+    dom.englishSentenceBox.textContent = text;
+  }
+
   function clearTranslatedText(shouldPersist) {
     state.translatedText = '';
     renderTranslatedText('');
@@ -221,11 +239,20 @@
     }
   }
 
+  function clearEnglishSentenceText(shouldPersist) {
+    state.englishSentenceText = '';
+    renderEnglishSentenceText('');
+    if (shouldPersist !== false) {
+      persistPromptState();
+    }
+  }
+
   function syncPromptFromSelections() {
     state.promptOutput = coreModule.buildPrompt(state.selections);
     dom.promptOutput.value = state.promptOutput;
     clearSentenceText(false);
     clearTranslatedText(false);
+    clearEnglishSentenceText(false);
     persistPromptState();
   }
 
@@ -304,10 +331,25 @@
     persistPromptState();
   }
 
+  function handleEnglishSentenceCompose() {
+    const englishSentence = coreModule.buildEnglishSentencePrompt(state.selections);
+    if (!englishSentence) {
+      state.englishSentenceText = '';
+      renderEnglishSentenceText('선택한 태그를 기준으로만 영문 문장을 생성할 수 있습니다.');
+      persistPromptState();
+      return;
+    }
+
+    state.englishSentenceText = englishSentence;
+    renderEnglishSentenceText(englishSentence);
+    persistPromptState();
+  }
+
   function handlePromptInput() {
     state.promptOutput = dom.promptOutput.value;
     clearSentenceText(false);
     clearTranslatedText(false);
+    clearEnglishSentenceText(false);
     persistPromptState();
   }
 
@@ -316,10 +358,12 @@
     state.promptOutput = '';
     state.sentenceText = '';
     state.translatedText = '';
+    state.englishSentenceText = '';
     renderTagGroups();
     dom.promptOutput.value = '';
     renderSentenceText('');
     renderTranslatedText('');
+    renderEnglishSentenceText('');
     storageModule.clearState();
   }
 
@@ -394,6 +438,7 @@
     dom.backToDashboardBtn.addEventListener('click', showDashboard);
     dom.sentenceBtn.addEventListener('click', handleSentenceCompose);
     dom.translateBtn.addEventListener('click', handleTranslate);
+    dom.englishSentenceBtn.addEventListener('click', handleEnglishSentenceCompose);
     dom.clearBtn.addEventListener('click', handleClearAll);
     dom.copyKoreanBtn.addEventListener('click', function copyKorean() {
       copyText(dom.promptOutput.value, '한글 프롬프트 복사됨');
@@ -403,6 +448,9 @@
     });
     dom.copyEnglishBtn.addEventListener('click', function copyEnglish() {
       copyText(dom.translatedBox.textContent.trim(), '영문 프롬프트 복사됨');
+    });
+    dom.copyEnglishSentenceBtn.addEventListener('click', function copyEnglishSentence() {
+      copyText(dom.englishSentenceBox.textContent.trim(), '영문 문장 프롬프트 복사됨');
     });
     dom.copyNegativeBtn.addEventListener('click', function copyNegative() {
       copyText(NEGATIVE_PROMPT, '네거티브 프롬프트 복사됨');
@@ -418,6 +466,7 @@
     dom.promptOutput.value = state.promptOutput;
     renderSentenceText(state.sentenceText);
     renderTranslatedText(state.translatedText);
+    renderEnglishSentenceText(state.englishSentenceText);
     dom.negativePromptBox.textContent = NEGATIVE_PROMPT;
     persistPromptState();
   }
