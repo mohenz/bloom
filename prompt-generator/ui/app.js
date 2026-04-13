@@ -15,6 +15,7 @@
     logout: '/api/auth/logout',
     me: '/api/auth/me',
   };
+  const HOSTED_APP_URL = 'https://bloom-rouge-zeta.vercel.app/';
   const DEFAULT_LOGIN_ERROR_MESSAGE = '이메일 또는 비밀번호가 올바르지 않습니다.';
   const NEGATIVE_PROMPT = [
     '(worst quality, low quality:1.4), mutated hands, malformed limbs, deformed fingers, extra fingers,',
@@ -35,6 +36,7 @@
     englishSentenceText: '',
     historyItems: [],
     activeHistoryId: '',
+    isGuestMode: false,
   };
 
   const dom = {};
@@ -76,6 +78,9 @@
     dom.loginHelp = documentRef.getElementById('loginHelp');
     dom.loginError = documentRef.getElementById('loginError');
     dom.loginSubmitBtn = documentRef.getElementById('loginSubmitBtn');
+    dom.loginAltActions = documentRef.getElementById('loginAltActions');
+    dom.openHostedAppBtn = documentRef.getElementById('openHostedAppBtn');
+    dom.guestPreviewBtn = documentRef.getElementById('guestPreviewBtn');
     dom.dashboardUserBadge = documentRef.getElementById('dashboardUserBadge');
     dom.builderUserBadge = documentRef.getElementById('builderUserBadge');
     dom.historyUserBadge = documentRef.getElementById('historyUserBadge');
@@ -480,7 +485,11 @@
     state.activeHistoryId = '';
     renderHistorySaveState();
     renderHistoryList();
-    setHistoryStatus('저장된 프롬프트를 확인하려면 로그인 후 새로고침하세요.');
+    setHistoryStatus(
+      state.isGuestMode
+        ? '게스트 미리보기에서는 Prompt History 저장과 불러오기를 사용할 수 없습니다.'
+        : '저장된 프롬프트를 확인하려면 로그인 후 새로고침하세요.'
+    );
   }
 
   function clearHistoryDraft(announce) {
@@ -532,11 +541,27 @@
     dom.loginSubmitBtn.textContent = isLoading ? (label || '처리 중...') : '로그인';
   }
 
+  function showLoginAlternatives(visible) {
+    dom.loginAltActions.classList.toggle('is-hidden', !visible);
+  }
+
+  function isGitHubPagesPreview() {
+    return Boolean(global.location && /\.github\.io$/i.test(global.location.hostname || ''));
+  }
+
+  function renderSessionActions() {
+    const logoutLabel = state.isGuestMode ? '미리보기 종료' : '로그아웃';
+    dom.dashboardLogoutBtn.textContent = logoutLabel;
+    dom.builderLogoutBtn.textContent = logoutLabel;
+    dom.historyLogoutBtn.textContent = logoutLabel;
+  }
+
   function renderUserBadges() {
     const label = state.currentUser ? state.currentUser.name : '';
     dom.dashboardUserBadge.textContent = label;
     dom.builderUserBadge.textContent = label;
     dom.historyUserBadge.textContent = label;
+    renderSessionActions();
   }
 
   function setScreen(screenName) {
@@ -574,10 +599,13 @@
   function setCurrentUser(user) {
     if (!user) {
       state.currentUser = null;
+      state.isGuestMode = false;
       renderUserBadges();
       resetHistoryState();
       return;
     }
+
+    state.isGuestMode = user.id === '__guest__';
 
     state.currentUser = {
       id: user.id || '',
@@ -613,6 +641,31 @@
       status: response.status,
       payload,
     };
+  }
+
+  function configureGitHubPagesPreview() {
+    authEnabled = false;
+    setLoginFormDisabled(true);
+    dom.loginSubmitBtn.disabled = true;
+    dom.loginSubmitBtn.textContent = 'GitHub Pages 미지원';
+    setLoginHelp('GitHub Pages 미리보기에서는 로그인과 저장 기능을 사용할 수 없습니다. 정식 앱으로 이동하거나 게스트로 둘러보세요.');
+    showLoginAlternatives(true);
+  }
+
+  function openHostedApp() {
+    global.location.href = HOSTED_APP_URL;
+  }
+
+  function enterGuestPreview() {
+    hideLoginError();
+    setCurrentUser({
+      id: '__guest__',
+      email: '',
+      displayName: 'Guest Preview',
+    });
+    resetHistoryState();
+    dom.loginForm.reset();
+    showDashboard();
   }
 
   async function refreshPromptHistory(options) {
@@ -810,6 +863,7 @@
     setLoginHelp('로그인 상태를 확인하는 중입니다.');
     setLoginFormDisabled(true);
     setLoginSubmitState(true, '준비 중...');
+    showLoginAlternatives(false);
 
     if (!canUseAuthApi()) {
       authEnabled = false;
@@ -828,6 +882,11 @@
       });
 
       if (!result.ok) {
+        if (isGitHubPagesPreview()) {
+          configureGitHubPagesPreview();
+          return;
+        }
+
         authEnabled = false;
         setLoginHelp('로그인 API를 찾지 못했습니다. Vercel 배포 환경에서 접속 중인지 확인하세요.');
         setLoginSubmitState(false);
@@ -846,6 +905,7 @@
       setLoginHelp('이메일과 비밀번호로 로그인합니다.');
       setLoginFormDisabled(false);
       setLoginSubmitState(false);
+      showLoginAlternatives(false);
 
       if (payload.authenticated && payload.user) {
         setCurrentUser(payload.user);
@@ -854,6 +914,11 @@
         });
       }
     } catch (error) {
+      if (isGitHubPagesPreview()) {
+        configureGitHubPagesPreview();
+        return;
+      }
+
       authEnabled = false;
       setLoginHelp('로그인 서버와 연결하지 못했습니다. 배포 환경과 인증 설정을 확인하세요.');
       setLoginSubmitState(false);
@@ -913,8 +978,10 @@
   }
 
   async function handleLogout() {
+    const shouldRestoreGitHubPagesPreview = isGitHubPagesPreview();
+
     try {
-      if (canUseAuthApi()) {
+      if (canUseAuthApi() && !state.isGuestMode) {
         await requestAuth(AUTH_ENDPOINTS.logout, {
           method: 'POST',
           headers: {
@@ -931,12 +998,18 @@
     dom.loginForm.reset();
     hideLoginError();
     showLogin();
+
+    if (shouldRestoreGitHubPagesPreview) {
+      configureGitHubPagesPreview();
+    }
   }
 
   function bindEvents() {
     dom.loginForm.addEventListener('submit', function onSubmit(event) {
       handleLoginSubmit(event);
     });
+    dom.openHostedAppBtn.addEventListener('click', openHostedApp);
+    dom.guestPreviewBtn.addEventListener('click', enterGuestPreview);
     dom.dashboardLogoutBtn.addEventListener('click', handleLogout);
     dom.builderLogoutBtn.addEventListener('click', handleLogout);
     dom.historyLogoutBtn.addEventListener('click', handleLogout);
