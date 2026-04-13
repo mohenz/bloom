@@ -865,6 +865,11 @@
     setLoginSubmitState(true, '준비 중...');
     showLoginAlternatives(false);
 
+    if (isGitHubPagesPreview()) {
+      configureGitHubPagesPreview();
+      return;
+    }
+
     if (!canUseAuthApi()) {
       authEnabled = false;
       setLoginHelp('로그인은 배포 서버 또는 로컬 API 환경에서만 동작합니다.');
