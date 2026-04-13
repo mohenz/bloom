@@ -19,15 +19,15 @@
         <div class="section-title"><span class="dot"></span> 로그인</div>
         <form class="login-form" id="loginForm">
           <label class="form-label" for="emailInput">이메일</label>
-          <input class="form-input" id="emailInput" name="email" type="email" autocomplete="username" placeholder="admin@bloom.local" required>
+          <input class="form-input" id="emailInput" name="email" type="email" autocomplete="username" placeholder="user@example.com" required>
 
           <label class="form-label" for="passwordInput">비밀번호</label>
-          <input class="form-input" id="passwordInput" name="password" type="password" autocomplete="current-password" placeholder="bloom1234" required>
+          <input class="form-input" id="passwordInput" name="password" type="password" autocomplete="current-password" placeholder="비밀번호를 입력하세요" required>
 
-          <p class="form-help">현재는 데모 로그인입니다. 이후 실제 인증 API로 교체할 수 있습니다.</p>
+          <p class="form-help" id="loginHelp">이메일과 비밀번호로 로그인합니다.</p>
           <p class="form-error is-hidden" id="loginError">이메일 또는 비밀번호가 올바르지 않습니다.</p>
 
-          <button class="btn btn-login" type="submit">로그인</button>
+          <button class="btn btn-login" id="loginSubmitBtn" type="submit">로그인</button>
         </form>
       </div>
     </div>

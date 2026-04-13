@@ -9,11 +9,12 @@
 
   const DATA = dataModule.DATA;
   const SINGLE_SELECT_KEYS = dataModule.SINGLE_SELECT_KEYS;
-  const DEMO_USER = {
-    email: 'admin@bloom.local',
-    password: 'bloom1234',
-    name: 'Bloom Admin',
+  const AUTH_ENDPOINTS = {
+    login: '/api/auth/login',
+    logout: '/api/auth/logout',
+    me: '/api/auth/me',
   };
+  const DEFAULT_LOGIN_ERROR_MESSAGE = '이메일 또는 비밀번호가 올바르지 않습니다.';
   const NEGATIVE_PROMPT = [
     '(worst quality, low quality:1.4), mutated hands, malformed limbs, deformed fingers, extra fingers,',
     'missing fingers, fused fingers, too many fingers, long neck, bad anatomy, disfigured, poorly drawn face,',
@@ -34,6 +35,7 @@
   };
 
   const dom = {};
+  let authEnabled = false;
 
   function createEmptySelections() {
     const selections = {};
@@ -67,7 +69,9 @@
     dom.loginForm = documentRef.getElementById('loginForm');
     dom.emailInput = documentRef.getElementById('emailInput');
     dom.passwordInput = documentRef.getElementById('passwordInput');
+    dom.loginHelp = documentRef.getElementById('loginHelp');
     dom.loginError = documentRef.getElementById('loginError');
+    dom.loginSubmitBtn = documentRef.getElementById('loginSubmitBtn');
     dom.dashboardUserBadge = documentRef.getElementById('dashboardUserBadge');
     dom.builderUserBadge = documentRef.getElementById('builderUserBadge');
     dom.dashboardLogoutBtn = documentRef.getElementById('dashboardLogoutBtn');
@@ -107,19 +111,6 @@
     state.englishSentenceText = typeof savedState.englishSentenceText === 'string' ? savedState.englishSentenceText : '';
   }
 
-  function restoreSession() {
-    const savedSession = storageModule.loadSession();
-    if (!savedSession || savedSession.email !== DEMO_USER.email) {
-      return;
-    }
-
-    state.currentUser = {
-      email: savedSession.email,
-      name: savedSession.name || DEMO_USER.name,
-    };
-    state.currentScreen = 'dashboard';
-  }
-
   function persistPromptState() {
     storageModule.saveState({
       selections: state.selections,
@@ -127,18 +118,6 @@
       sentenceText: state.sentenceText,
       translatedText: state.translatedText,
       englishSentenceText: state.englishSentenceText,
-    });
-  }
-
-  function persistSession() {
-    if (!state.currentUser) {
-      storageModule.clearSession();
-      return;
-    }
-
-    storageModule.saveSession({
-      email: state.currentUser.email,
-      name: state.currentUser.name,
     });
   }
 
@@ -367,12 +346,29 @@
     storageModule.clearState();
   }
 
+  function setLoginHelp(message) {
+    dom.loginHelp.textContent = message;
+  }
+
+  function showLoginError(message) {
+    dom.loginError.textContent = message || DEFAULT_LOGIN_ERROR_MESSAGE;
+    dom.loginError.classList.remove('is-hidden');
+  }
+
   function hideLoginError() {
+    dom.loginError.textContent = DEFAULT_LOGIN_ERROR_MESSAGE;
     dom.loginError.classList.add('is-hidden');
   }
 
-  function showLoginError() {
-    dom.loginError.classList.remove('is-hidden');
+  function setLoginFormDisabled(disabled) {
+    dom.emailInput.disabled = disabled;
+    dom.passwordInput.disabled = disabled;
+    dom.loginSubmitBtn.disabled = disabled;
+  }
+
+  function setLoginSubmitState(isLoading, label) {
+    dom.loginSubmitBtn.disabled = isLoading || !authEnabled;
+    dom.loginSubmitBtn.textContent = isLoading ? (label || '처리 중...') : '로그인';
   }
 
   function renderUserBadges() {
@@ -400,38 +396,182 @@
     setScreen('login');
   }
 
-  function handleLoginSubmit(event) {
+  function buildFallbackName(email) {
+    if (!email) {
+      return 'Bloom User';
+    }
+
+    return email.split('@')[0] || 'Bloom User';
+  }
+
+  function setCurrentUser(user) {
+    if (!user) {
+      state.currentUser = null;
+      renderUserBadges();
+      return;
+    }
+
+    state.currentUser = {
+      id: user.id || '',
+      email: user.email || '',
+      name: user.displayName || buildFallbackName(user.email || ''),
+    };
+
+    renderUserBadges();
+  }
+
+  function canUseAuthApi() {
+    return Boolean(global.location && /^https?:$/i.test(global.location.protocol));
+  }
+
+  async function readJsonResponse(response) {
+    const text = await response.text();
+    if (!text) {
+      return {};
+    }
+
+    try {
+      return JSON.parse(text);
+    } catch (error) {
+      return {};
+    }
+  }
+
+  async function requestAuth(url, options) {
+    const response = await global.fetch(url, options);
+    const payload = await readJsonResponse(response);
+    return {
+      ok: response.ok,
+      status: response.status,
+      payload,
+    };
+  }
+
+  async function initializeAuth() {
+    setLoginHelp('로그인 상태를 확인하는 중입니다.');
+    setLoginFormDisabled(true);
+    setLoginSubmitState(true, '준비 중...');
+
+    if (!canUseAuthApi()) {
+      authEnabled = false;
+      setLoginHelp('로그인은 배포 서버 또는 로컬 API 환경에서만 동작합니다.');
+      setLoginSubmitState(false);
+      return;
+    }
+
+    try {
+      const result = await requestAuth(AUTH_ENDPOINTS.me, {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+        },
+        credentials: 'same-origin',
+      });
+
+      if (!result.ok) {
+        authEnabled = false;
+        setLoginHelp('로그인 API를 찾지 못했습니다. Vercel 배포 환경에서 접속 중인지 확인하세요.');
+        setLoginSubmitState(false);
+        return;
+      }
+
+      const payload = result.payload || {};
+      authEnabled = payload.configured !== false;
+
+      if (!authEnabled) {
+        setLoginHelp(payload.message || '로그인 서버 설정이 아직 완료되지 않았습니다.');
+        setLoginSubmitState(false);
+        return;
+      }
+
+      setLoginHelp('이메일과 비밀번호로 로그인합니다.');
+      setLoginFormDisabled(false);
+      setLoginSubmitState(false);
+
+      if (payload.authenticated && payload.user) {
+        setCurrentUser(payload.user);
+      }
+    } catch (error) {
+      authEnabled = false;
+      setLoginHelp('로그인 서버와 연결하지 못했습니다. 배포 환경과 인증 설정을 확인하세요.');
+      setLoginSubmitState(false);
+    }
+  }
+
+  async function handleLoginSubmit(event) {
     event.preventDefault();
+    hideLoginError();
+
+    if (!authEnabled) {
+      showLoginError('로그인 설정이 아직 완료되지 않았습니다.');
+      return;
+    }
 
     const email = dom.emailInput.value.trim().toLowerCase();
     const password = dom.passwordInput.value;
 
-    if (email !== DEMO_USER.email || password !== DEMO_USER.password) {
-      showLoginError();
+    if (!email || !password) {
+      showLoginError('이메일과 비밀번호를 모두 입력하세요.');
       return;
     }
 
-    hideLoginError();
-    state.currentUser = {
-      email: DEMO_USER.email,
-      name: DEMO_USER.name,
-    };
-    persistSession();
-    renderUserBadges();
-    showDashboard();
+    setLoginSubmitState(true, '로그인 중...');
+
+    try {
+      const result = await requestAuth(AUTH_ENDPOINTS.login, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        credentials: 'same-origin',
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      });
+
+      const payload = result.payload || {};
+      if (!result.ok || !payload.user) {
+        showLoginError(payload.message || DEFAULT_LOGIN_ERROR_MESSAGE);
+        return;
+      }
+
+      setCurrentUser(payload.user);
+      dom.loginForm.reset();
+      showDashboard();
+    } catch (error) {
+      showLoginError('로그인 서버에 연결하지 못했습니다.');
+    } finally {
+      setLoginSubmitState(false);
+    }
   }
 
-  function handleLogout() {
-    state.currentUser = null;
-    persistSession();
-    renderUserBadges();
+  async function handleLogout() {
+    try {
+      if (canUseAuthApi()) {
+        await requestAuth(AUTH_ENDPOINTS.logout, {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+          },
+          credentials: 'same-origin',
+        });
+      }
+    } catch (error) {
+      // Clear local UI state even when the API call fails.
+    }
+
+    setCurrentUser(null);
     dom.loginForm.reset();
     hideLoginError();
     showLogin();
   }
 
   function bindEvents() {
-    dom.loginForm.addEventListener('submit', handleLoginSubmit);
+    dom.loginForm.addEventListener('submit', function onSubmit(event) {
+      handleLoginSubmit(event);
+    });
     dom.dashboardLogoutBtn.addEventListener('click', handleLogout);
     dom.builderLogoutBtn.addEventListener('click', handleLogout);
     dom.openPromptBuilderBtn.addEventListener('click', showPromptBuilder);
@@ -481,15 +621,17 @@
     showLogin();
   }
 
-  function init() {
+  async function init() {
     cacheDom();
     restorePromptState();
-    restoreSession();
     renderTagGroups();
     initializePromptOutput();
     bindEvents();
+    await initializeAuth();
     initializeScreen();
   }
 
-  documentRef.addEventListener('DOMContentLoaded', init);
+  documentRef.addEventListener('DOMContentLoaded', function onReady() {
+    init();
+  });
 })(window, document);
