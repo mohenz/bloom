@@ -55,11 +55,11 @@
         <div class="hero-summary">
           <div class="summary-card">
             <span>활성 도구</span>
-            <strong>1</strong>
+            <strong>2</strong>
           </div>
           <div class="summary-card">
             <span>예정 도구</span>
-            <strong>3</strong>
+            <strong>2</strong>
           </div>
         </div>
       </section>
@@ -81,12 +81,12 @@
           <button class="btn btn-menu-disabled" type="button" disabled>준비 중</button>
         </article>
 
-        <article class="menu-card">
-          <div class="menu-status">COMING SOON</div>
+        <article class="menu-card menu-card-active">
+          <div class="menu-status">ACTIVE</div>
           <h3>Prompt History</h3>
-          <p>생성 이력과 즐겨찾기 프롬프트를 조회하는 프로그램 자리입니다.</p>
-          <div class="menu-meta">로그인 기반 확장 예정</div>
-          <button class="btn btn-menu-disabled" type="button" disabled>준비 중</button>
+          <p>생성한 프롬프트를 저장하고, 저장된 항목을 불러와 수정하거나 삭제합니다.</p>
+          <div class="menu-meta">로그인 사용자별 생성일시 기준 저장</div>
+          <button class="btn btn-menu" id="openPromptHistoryBtn" type="button">열기</button>
         </article>
 
         <article class="menu-card">
@@ -100,6 +100,43 @@
     </main>
   </section>
 
+  <section class="screen prompt-history-screen is-hidden" id="promptHistoryScreen">
+    <header class="service-topbar tool-header">
+      <div class="tool-header-main">
+        <p class="topbar-kicker">PROGRAM</p>
+        <h1>Prompt History</h1>
+      </div>
+      <div class="tool-header-actions">
+        <button class="btn btn-ghost" id="historyBackToDashboardBtn" type="button">메인으로</button>
+        <button class="btn btn-ghost" id="historyOpenBuilderBtn" type="button">Builder 열기</button>
+        <button class="btn btn-ghost" id="refreshHistoryBtn" type="button">새로고침</button>
+        <span class="user-badge" id="historyUserBadge"></span>
+        <button class="btn btn-ghost" id="historyLogoutBtn" type="button">로그아웃</button>
+      </div>
+    </header>
+
+    <main class="history-main">
+      <section class="history-hero">
+        <div>
+          <p class="hero-kicker">PROMPT ARCHIVE</p>
+          <h2>생성한 프롬프트를 생성일시 기준으로 저장하고 다시 이어서 편집합니다.</h2>
+          <p>Prompt Builder에서 저장한 프롬프트를 여기서 불러오면 선택값과 결과 텍스트를 함께 복원합니다.</p>
+        </div>
+      </section>
+
+      <section class="history-panel">
+        <div class="history-panel-header">
+          <div>
+            <div class="section-title"><span class="dot"></span> Prompt History</div>
+            <p class="history-status" id="historyStatus">저장된 프롬프트를 불러오는 중입니다.</p>
+          </div>
+        </div>
+        <p class="history-empty" id="historyEmpty">저장된 프롬프트가 없습니다. Prompt Builder에서 저장을 먼저 진행해주세요.</p>
+        <div class="history-list" id="historyList"></div>
+      </section>
+    </main>
+  </section>
+
   <section class="screen prompt-builder-screen is-hidden" id="promptBuilderScreen">
     <header class="service-topbar tool-header">
       <div class="tool-header-main">
@@ -108,6 +145,7 @@
       </div>
       <div class="tool-header-actions">
         <button class="btn btn-ghost" id="backToDashboardBtn" type="button">메인으로</button>
+        <button class="btn btn-ghost" id="openPromptHistoryFromBuilderBtn" type="button">히스토리</button>
         <span class="user-badge" id="builderUserBadge"></span>
         <button class="btn btn-ghost" id="builderLogoutBtn" type="button">로그아웃</button>
       </div>
@@ -248,6 +286,16 @@
             </div>
           </div>
           <textarea class="prompt-textarea" id="promptOutput" placeholder="위에서 옵션을 선택하면 프롬프트가 자동 생성됩니다..." rows="3"></textarea>
+          <div class="history-save-panel">
+            <div class="history-save-header">
+              <span class="prompt-label" style="color:var(--accent);">▸ PROMPT HISTORY</span>
+              <span class="history-save-status" id="historySaveStatus">새 저장 모드</span>
+            </div>
+            <div class="btn-row">
+              <button class="btn btn-history-save" id="saveHistoryBtn" type="button">히스토리 저장</button>
+              <button class="btn btn-history-reset" id="resetHistoryDraftBtn" type="button">새 저장 모드</button>
+            </div>
+          </div>
           <div id="sentenceWrapper" style="display:none;">
             <div class="prompt-label-row" style="margin-top:10px; margin-bottom:6px;">
               <span class="prompt-label" style="color:var(--accent2);">▸ 문장형 PROMPT</span>
@@ -287,6 +335,7 @@
 <script defer src="./prompt-generator/data/prompt-data.js"></script>
 <script defer src="./prompt-generator/core/build-prompt.js"></script>
 <script defer src="./prompt-generator/storage/selection-storage.js"></script>
+<script defer src="./prompt-generator/features/prompt-history.js"></script>
 <script defer src="./prompt-generator/ui/app.js"></script>
 </body>
 </html>

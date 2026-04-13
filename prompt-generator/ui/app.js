@@ -2,8 +2,9 @@
   const dataModule = global.PromptGeneratorData;
   const coreModule = global.PromptGeneratorCore;
   const storageModule = global.PromptGeneratorStorage;
+  const historyModule = global.PromptHistoryFeature;
 
-  if (!dataModule || !coreModule || !storageModule) {
+  if (!dataModule || !coreModule || !storageModule || !historyModule) {
     return;
   }
 
@@ -32,6 +33,8 @@
     sentenceText: '',
     translatedText: '',
     englishSentenceText: '',
+    historyItems: [],
+    activeHistoryId: '',
   };
 
   const dom = {};
@@ -65,6 +68,7 @@
   function cacheDom() {
     dom.loginScreen = documentRef.getElementById('loginScreen');
     dom.dashboardScreen = documentRef.getElementById('dashboardScreen');
+    dom.promptHistoryScreen = documentRef.getElementById('promptHistoryScreen');
     dom.promptBuilderScreen = documentRef.getElementById('promptBuilderScreen');
     dom.loginForm = documentRef.getElementById('loginForm');
     dom.emailInput = documentRef.getElementById('emailInput');
@@ -74,11 +78,24 @@
     dom.loginSubmitBtn = documentRef.getElementById('loginSubmitBtn');
     dom.dashboardUserBadge = documentRef.getElementById('dashboardUserBadge');
     dom.builderUserBadge = documentRef.getElementById('builderUserBadge');
+    dom.historyUserBadge = documentRef.getElementById('historyUserBadge');
     dom.dashboardLogoutBtn = documentRef.getElementById('dashboardLogoutBtn');
     dom.builderLogoutBtn = documentRef.getElementById('builderLogoutBtn');
+    dom.historyLogoutBtn = documentRef.getElementById('historyLogoutBtn');
     dom.openPromptBuilderBtn = documentRef.getElementById('openPromptBuilderBtn');
+    dom.openPromptHistoryBtn = documentRef.getElementById('openPromptHistoryBtn');
+    dom.openPromptHistoryFromBuilderBtn = documentRef.getElementById('openPromptHistoryFromBuilderBtn');
     dom.backToDashboardBtn = documentRef.getElementById('backToDashboardBtn');
+    dom.historyBackToDashboardBtn = documentRef.getElementById('historyBackToDashboardBtn');
+    dom.historyOpenBuilderBtn = documentRef.getElementById('historyOpenBuilderBtn');
+    dom.refreshHistoryBtn = documentRef.getElementById('refreshHistoryBtn');
+    dom.historyStatus = documentRef.getElementById('historyStatus');
+    dom.historyEmpty = documentRef.getElementById('historyEmpty');
+    dom.historyList = documentRef.getElementById('historyList');
     dom.promptOutput = documentRef.getElementById('promptOutput');
+    dom.saveHistoryBtn = documentRef.getElementById('saveHistoryBtn');
+    dom.resetHistoryDraftBtn = documentRef.getElementById('resetHistoryDraftBtn');
+    dom.historySaveStatus = documentRef.getElementById('historySaveStatus');
     dom.sentenceWrapper = documentRef.getElementById('sentenceWrapper');
     dom.sentenceBox = documentRef.getElementById('sentenceBox');
     dom.translatedWrapper = documentRef.getElementById('translatedWrapper');
@@ -332,12 +349,156 @@
     persistPromptState();
   }
 
+  function setHistoryStatus(message) {
+    dom.historyStatus.textContent = message;
+  }
+
+  function sortHistoryItems() {
+    state.historyItems.sort(function sortDescending(left, right) {
+      return new Date(right.createdAt).getTime() - new Date(left.createdAt).getTime();
+    });
+  }
+
+  function findHistoryRecord(historyId) {
+    return state.historyItems.find(function matchRecord(item) {
+      return item.id === historyId;
+    }) || null;
+  }
+
+  function upsertHistoryRecord(record) {
+    const normalizedRecord = historyModule.normalizeHistoryRecord(record);
+    const existingIndex = state.historyItems.findIndex(function findIndex(item) {
+      return item.id === normalizedRecord.id;
+    });
+
+    if (existingIndex >= 0) {
+      state.historyItems.splice(existingIndex, 1, normalizedRecord);
+    } else {
+      state.historyItems.push(normalizedRecord);
+    }
+
+    sortHistoryItems();
+    return normalizedRecord;
+  }
+
+  function removeHistoryRecord(historyId) {
+    state.historyItems = state.historyItems.filter(function filterRecord(item) {
+      return item.id !== historyId;
+    });
+  }
+
+  function countSelectedGroups(selections) {
+    return Object.keys(selections).reduce(function count(accumulator, key) {
+      return accumulator + (Array.isArray(selections[key]) && selections[key].length ? 1 : 0);
+    }, 0);
+  }
+
+  function renderHistorySaveState() {
+    const activeRecord = findHistoryRecord(state.activeHistoryId);
+
+    if (activeRecord) {
+      dom.historySaveStatus.textContent =
+        '편집 중: ' + historyModule.formatHistoryTimestamp(activeRecord.createdAt);
+      dom.saveHistoryBtn.textContent = '저장본 업데이트';
+      dom.resetHistoryDraftBtn.disabled = false;
+      return;
+    }
+
+    dom.historySaveStatus.textContent = '새 저장 모드';
+    dom.saveHistoryBtn.textContent = '히스토리 저장';
+    dom.resetHistoryDraftBtn.disabled = true;
+  }
+
+  function renderHistoryList() {
+    dom.historyList.innerHTML = '';
+
+    if (!state.historyItems.length) {
+      dom.historyEmpty.classList.remove('is-hidden');
+      return;
+    }
+
+    dom.historyEmpty.classList.add('is-hidden');
+
+    state.historyItems.forEach(function renderHistoryCard(record) {
+      const card = documentRef.createElement('article');
+      const isActive = record.id === state.activeHistoryId;
+
+      card.className = 'history-card' + (isActive ? ' is-active' : '');
+
+      const head = documentRef.createElement('div');
+      head.className = 'history-card-head';
+
+      const createdAt = documentRef.createElement('span');
+      createdAt.className = 'history-card-date';
+      createdAt.textContent = historyModule.formatHistoryTimestamp(record.createdAt);
+      head.appendChild(createdAt);
+
+      if (record.updatedAt && record.updatedAt !== record.createdAt) {
+        const updatedAt = documentRef.createElement('span');
+        updatedAt.className = 'history-card-updated';
+        updatedAt.textContent = '마지막 수정 ' + historyModule.formatHistoryTimestamp(record.updatedAt);
+        head.appendChild(updatedAt);
+      }
+
+      const preview = documentRef.createElement('p');
+      preview.className = 'history-card-preview';
+      preview.textContent = historyModule.buildHistoryPreview(record);
+
+      const meta = documentRef.createElement('p');
+      meta.className = 'history-card-meta';
+      meta.textContent = '선택 그룹 ' + countSelectedGroups(record.selections) + '개';
+
+      const actions = documentRef.createElement('div');
+      actions.className = 'history-card-actions';
+
+      const loadButton = documentRef.createElement('button');
+      loadButton.className = 'btn btn-history-load';
+      loadButton.type = 'button';
+      loadButton.dataset.action = 'load';
+      loadButton.dataset.id = record.id;
+      loadButton.textContent = isActive ? '불러온 상태' : '불러오기';
+      actions.appendChild(loadButton);
+
+      const deleteButton = documentRef.createElement('button');
+      deleteButton.className = 'btn btn-history-delete';
+      deleteButton.type = 'button';
+      deleteButton.dataset.action = 'delete';
+      deleteButton.dataset.id = record.id;
+      deleteButton.textContent = '삭제';
+      actions.appendChild(deleteButton);
+
+      card.appendChild(head);
+      card.appendChild(preview);
+      card.appendChild(meta);
+      card.appendChild(actions);
+      dom.historyList.appendChild(card);
+    });
+  }
+
+  function resetHistoryState() {
+    state.historyItems = [];
+    state.activeHistoryId = '';
+    renderHistorySaveState();
+    renderHistoryList();
+    setHistoryStatus('저장된 프롬프트를 확인하려면 로그인 후 새로고침하세요.');
+  }
+
+  function clearHistoryDraft(announce) {
+    state.activeHistoryId = '';
+    renderHistorySaveState();
+    renderHistoryList();
+    if (announce) {
+      showToast('새 저장 모드로 전환되었습니다');
+    }
+  }
+
   function handleClearAll() {
     state.selections = createEmptySelections();
     state.promptOutput = '';
     state.sentenceText = '';
     state.translatedText = '';
     state.englishSentenceText = '';
+    clearHistoryDraft(false);
     renderTagGroups();
     dom.promptOutput.value = '';
     renderSentenceText('');
@@ -375,12 +536,14 @@
     const label = state.currentUser ? state.currentUser.name : '';
     dom.dashboardUserBadge.textContent = label;
     dom.builderUserBadge.textContent = label;
+    dom.historyUserBadge.textContent = label;
   }
 
   function setScreen(screenName) {
     state.currentScreen = screenName;
     dom.loginScreen.classList.toggle('is-hidden', screenName !== 'login');
     dom.dashboardScreen.classList.toggle('is-hidden', screenName !== 'dashboard');
+    dom.promptHistoryScreen.classList.toggle('is-hidden', screenName !== 'prompt-history');
     dom.promptBuilderScreen.classList.toggle('is-hidden', screenName !== 'prompt-builder');
   }
 
@@ -390,6 +553,10 @@
 
   function showPromptBuilder() {
     setScreen('prompt-builder');
+  }
+
+  function showPromptHistory() {
+    setScreen('prompt-history');
   }
 
   function showLogin() {
@@ -408,6 +575,7 @@
     if (!user) {
       state.currentUser = null;
       renderUserBadges();
+      resetHistoryState();
       return;
     }
 
@@ -445,6 +613,197 @@
       status: response.status,
       payload,
     };
+  }
+
+  async function refreshPromptHistory(options) {
+    const nextOptions = {
+      silent: false,
+      ...options,
+    };
+
+    if (!authEnabled || !state.currentUser) {
+      resetHistoryState();
+      return;
+    }
+
+    if (!nextOptions.silent) {
+      setHistoryStatus('저장된 프롬프트를 불러오는 중입니다.');
+    }
+
+    dom.refreshHistoryBtn.disabled = true;
+
+    try {
+      const result = await historyModule.listHistory();
+      const payload = result.payload || {};
+
+      if (!result.ok) {
+        setHistoryStatus(payload.message || 'Prompt History를 불러오지 못했습니다.');
+        return;
+      }
+
+      state.historyItems = Array.isArray(payload.items)
+        ? payload.items.map(historyModule.normalizeHistoryRecord)
+        : [];
+      sortHistoryItems();
+
+      if (state.activeHistoryId && !findHistoryRecord(state.activeHistoryId)) {
+        state.activeHistoryId = '';
+      }
+
+      renderHistoryList();
+      renderHistorySaveState();
+      setHistoryStatus(
+        state.historyItems.length
+          ? '저장된 프롬프트 ' + state.historyItems.length + '건'
+          : '저장된 프롬프트가 없습니다.'
+      );
+    } catch (error) {
+      setHistoryStatus('Prompt History 서버와 연결하지 못했습니다.');
+    } finally {
+      dom.refreshHistoryBtn.disabled = false;
+    }
+  }
+
+  function buildCurrentHistoryPayload() {
+    return historyModule.buildHistoryPayload({
+      selections: state.selections,
+      promptOutput: dom.promptOutput.value,
+      sentenceText: state.sentenceText,
+      translatedText: state.translatedText,
+      englishSentenceText: state.englishSentenceText,
+    });
+  }
+
+  async function handleSaveHistory() {
+    if (!authEnabled || !state.currentUser) {
+      showToast('로그인 후 Prompt History를 사용할 수 있습니다');
+      return;
+    }
+
+    const payload = buildCurrentHistoryPayload();
+    if (!historyModule.hasHistoryContent(payload)) {
+      showToast('저장할 프롬프트가 없습니다');
+      return;
+    }
+
+    dom.saveHistoryBtn.disabled = true;
+
+    try {
+      let result;
+      let savedMessage = '프롬프트를 새로 저장했습니다';
+
+      if (state.activeHistoryId) {
+        result = await historyModule.updateHistory(state.activeHistoryId, payload);
+        savedMessage = '불러온 프롬프트를 업데이트했습니다';
+      } else {
+        result = await historyModule.createHistory(payload);
+      }
+
+      const responsePayload = result && result.payload ? result.payload : {};
+      if (!result || !result.ok || !responsePayload.item) {
+        showToast(responsePayload.message || 'Prompt History 저장에 실패했습니다');
+        return;
+      }
+
+      const savedRecord = upsertHistoryRecord(responsePayload.item);
+      state.activeHistoryId = savedRecord.id;
+      renderHistoryList();
+      renderHistorySaveState();
+      setHistoryStatus('저장된 프롬프트 ' + state.historyItems.length + '건');
+      showToast(savedMessage);
+    } catch (error) {
+      showToast('Prompt History 서버와 연결하지 못했습니다');
+    } finally {
+      dom.saveHistoryBtn.disabled = false;
+    }
+  }
+
+  function applyHistoryRecord(record) {
+    state.selections = sanitizeSelections(record.selections);
+    state.promptOutput = record.promptOutput || '';
+    state.sentenceText = record.sentenceText || '';
+    state.translatedText = record.translatedText || '';
+    state.englishSentenceText = record.englishSentenceText || '';
+    state.activeHistoryId = record.id;
+
+    renderTagGroups();
+    dom.promptOutput.value = state.promptOutput;
+    renderSentenceText(state.sentenceText);
+    renderTranslatedText(state.translatedText);
+    renderEnglishSentenceText(state.englishSentenceText);
+    renderHistorySaveState();
+    renderHistoryList();
+    persistPromptState();
+    showPromptBuilder();
+    showToast('프롬프트를 불러왔습니다');
+  }
+
+  async function handleDeleteHistory(historyId) {
+    const targetRecord = findHistoryRecord(historyId);
+    if (!targetRecord) {
+      return;
+    }
+
+    const confirmed = global.confirm(
+      '"' + historyModule.formatHistoryTimestamp(targetRecord.createdAt) + '" 프롬프트를 삭제하시겠습니까?'
+    );
+    if (!confirmed) {
+      return;
+    }
+
+    try {
+      const result = await historyModule.deleteHistory(historyId);
+      const payload = result && result.payload ? result.payload : {};
+
+      if (!result || !result.ok) {
+        showToast(payload.message || 'Prompt History 삭제에 실패했습니다');
+        return;
+      }
+
+      removeHistoryRecord(historyId);
+      if (state.activeHistoryId === historyId) {
+        clearHistoryDraft(false);
+      } else {
+        renderHistoryList();
+      }
+      setHistoryStatus(
+        state.historyItems.length
+          ? '저장된 프롬프트 ' + state.historyItems.length + '건'
+          : '저장된 프롬프트가 없습니다.'
+      );
+      showToast('프롬프트를 삭제했습니다');
+    } catch (error) {
+      showToast('Prompt History 서버와 연결하지 못했습니다');
+    }
+  }
+
+  async function handleHistoryListClick(event) {
+    const button = event.target.closest('button[data-action]');
+    if (!button) {
+      return;
+    }
+
+    const historyId = button.dataset.id || '';
+    if (!historyId) {
+      return;
+    }
+
+    if (button.dataset.action === 'load') {
+      const targetRecord = findHistoryRecord(historyId);
+      if (targetRecord) {
+        applyHistoryRecord(targetRecord);
+      }
+      return;
+    }
+
+    if (button.dataset.action === 'delete') {
+      await handleDeleteHistory(historyId);
+    }
+  }
+
+  async function openPromptHistoryScreen() {
+    showPromptHistory();
+    await refreshPromptHistory();
   }
 
   async function initializeAuth() {
@@ -490,6 +849,9 @@
 
       if (payload.authenticated && payload.user) {
         setCurrentUser(payload.user);
+        await refreshPromptHistory({
+          silent: true,
+        });
       }
     } catch (error) {
       authEnabled = false;
@@ -538,6 +900,9 @@
       }
 
       setCurrentUser(payload.user);
+      await refreshPromptHistory({
+        silent: true,
+      });
       dom.loginForm.reset();
       showDashboard();
     } catch (error) {
@@ -574,8 +939,29 @@
     });
     dom.dashboardLogoutBtn.addEventListener('click', handleLogout);
     dom.builderLogoutBtn.addEventListener('click', handleLogout);
+    dom.historyLogoutBtn.addEventListener('click', handleLogout);
     dom.openPromptBuilderBtn.addEventListener('click', showPromptBuilder);
+    dom.openPromptHistoryBtn.addEventListener('click', function onOpenHistory() {
+      openPromptHistoryScreen();
+    });
+    dom.openPromptHistoryFromBuilderBtn.addEventListener('click', function onOpenHistoryFromBuilder() {
+      openPromptHistoryScreen();
+    });
     dom.backToDashboardBtn.addEventListener('click', showDashboard);
+    dom.historyBackToDashboardBtn.addEventListener('click', showDashboard);
+    dom.historyOpenBuilderBtn.addEventListener('click', showPromptBuilder);
+    dom.refreshHistoryBtn.addEventListener('click', function onRefreshHistory() {
+      refreshPromptHistory();
+    });
+    dom.saveHistoryBtn.addEventListener('click', function onSaveHistory() {
+      handleSaveHistory();
+    });
+    dom.resetHistoryDraftBtn.addEventListener('click', function onResetHistoryDraft() {
+      clearHistoryDraft(true);
+    });
+    dom.historyList.addEventListener('click', function onHistoryClick(event) {
+      handleHistoryListClick(event);
+    });
     dom.sentenceBtn.addEventListener('click', handleSentenceCompose);
     dom.translateBtn.addEventListener('click', handleTranslate);
     dom.englishSentenceBtn.addEventListener('click', handleEnglishSentenceCompose);
@@ -608,6 +994,9 @@
     renderTranslatedText(state.translatedText);
     renderEnglishSentenceText(state.englishSentenceText);
     dom.negativePromptBox.textContent = NEGATIVE_PROMPT;
+    renderHistorySaveState();
+    renderHistoryList();
+    setHistoryStatus('저장된 프롬프트를 확인하려면 로그인 후 새로고침하세요.');
     persistPromptState();
   }
 

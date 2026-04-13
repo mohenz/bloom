@@ -1,22 +1,9 @@
 import {
   buildUserPayload,
   createJsonResponse,
-  getSessionSecret,
-  getSessionTokenFromRequest,
-  hashSessionToken,
   serializeExpiredSessionCookie,
 } from '../../lib/auth-utils.js';
-import {
-  fetchSessionByTokenHash,
-  fetchUserById,
-  isAuthStoreConfigured,
-  revokeSessionByTokenHash,
-  updateSessionLastAccess,
-} from '../../lib/auth-store.js';
-
-function isSessionExpired(session) {
-  return new Date(session.expires_at).getTime() <= Date.now();
-}
+import { getAuthenticatedSession } from '../../lib/auth-session.js';
 
 export default async function handler(request, response) {
   if (request.method !== 'GET') {
@@ -24,33 +11,19 @@ export default async function handler(request, response) {
     return;
   }
 
-  if (!isAuthStoreConfigured()) {
-    createJsonResponse(response, 200, {
-      configured: false,
-      authenticated: false,
-      message: '인증 서버 설정이 아직 완료되지 않았습니다.',
-    });
-    return;
-  }
-
-  const sessionToken = getSessionTokenFromRequest(request);
-  if (!sessionToken) {
-    createJsonResponse(response, 200, {
-      configured: true,
-      authenticated: false,
-    });
-    return;
-  }
-
   try {
-    const sessionTokenHash = hashSessionToken(sessionToken, getSessionSecret());
-    const session = await fetchSessionByTokenHash(sessionTokenHash);
+    const authState = await getAuthenticatedSession(request);
 
-    if (!session || session.revoked_at || isSessionExpired(session)) {
-      if (session && !session.revoked_at) {
-        await revokeSessionByTokenHash(sessionTokenHash);
-      }
+    if (!authState.configured) {
+      createJsonResponse(response, 200, {
+        configured: false,
+        authenticated: false,
+        message: authState.message || '인증 서버 설정이 아직 완료되지 않았습니다.',
+      });
+      return;
+    }
 
+    if (!authState.authenticated) {
       createJsonResponse(
         response,
         200,
@@ -58,36 +31,19 @@ export default async function handler(request, response) {
           configured: true,
           authenticated: false,
         },
-        {
-          'Set-Cookie': serializeExpiredSessionCookie(request),
-        }
+        authState.shouldClearCookie
+          ? {
+              'Set-Cookie': serializeExpiredSessionCookie(request),
+            }
+          : undefined
       );
       return;
     }
-
-    const user = await fetchUserById(session.user_id);
-    if (!user || user.status !== 'active') {
-      await revokeSessionByTokenHash(sessionTokenHash);
-      createJsonResponse(
-        response,
-        200,
-        {
-          configured: true,
-          authenticated: false,
-        },
-        {
-          'Set-Cookie': serializeExpiredSessionCookie(request),
-        }
-      );
-      return;
-    }
-
-    await updateSessionLastAccess(session.id);
 
     createJsonResponse(response, 200, {
       configured: true,
       authenticated: true,
-      user: buildUserPayload(user),
+      user: buildUserPayload(authState.user),
     });
   } catch (error) {
     createJsonResponse(response, 500, {

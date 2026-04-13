@@ -210,6 +210,12 @@ body {
   padding: 28px 24px 120px;
 }
 
+.history-main {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 28px 24px 120px;
+}
+
 .dashboard-hero {
   display: flex;
   align-items: stretch;
@@ -308,6 +314,155 @@ body {
 .menu-meta {
   color: #8f8776;
   font-size: 13px;
+}
+
+.history-hero,
+.history-panel {
+  padding: 28px;
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: linear-gradient(135deg, rgba(23, 21, 16, 0.96), rgba(14, 14, 14, 0.96));
+  box-shadow: 0 22px 48px rgba(0, 0, 0, 0.26);
+}
+
+.history-hero h2 {
+  font-size: clamp(24px, 3.2vw, 38px);
+  line-height: 1.2;
+  margin: 10px 0 12px;
+}
+
+.history-hero p:last-child {
+  max-width: 760px;
+  color: var(--text-dim);
+  line-height: 1.8;
+}
+
+.history-panel {
+  display: grid;
+  gap: 18px;
+  margin-top: 24px;
+  background: rgba(18, 18, 18, 0.94);
+}
+
+.history-panel-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.history-status {
+  color: var(--text-dim);
+  font-size: 14px;
+  line-height: 1.7;
+  margin-top: 8px;
+}
+
+.history-empty {
+  padding: 18px 20px;
+  border-radius: 18px;
+  border: 1px dashed rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.02);
+  color: var(--text-dim);
+  line-height: 1.7;
+}
+
+.history-list {
+  display: grid;
+  gap: 16px;
+}
+
+.history-card {
+  display: grid;
+  gap: 14px;
+  padding: 20px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: linear-gradient(180deg, rgba(16, 16, 16, 0.96), rgba(12, 12, 12, 0.96));
+}
+
+.history-card.is-active {
+  border-color: rgba(240, 165, 0, 0.38);
+  box-shadow: 0 0 0 1px rgba(240, 165, 0, 0.18) inset;
+}
+
+.history-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.history-card-date {
+  font-family: 'Space Mono', monospace;
+  font-size: 12px;
+  color: var(--accent);
+}
+
+.history-card-updated {
+  font-size: 11px;
+  color: var(--accent3);
+  letter-spacing: 0.4px;
+}
+
+.history-card-preview {
+  color: var(--text);
+  line-height: 1.8;
+  white-space: pre-wrap;
+  word-break: keep-all;
+}
+
+.history-card-meta {
+  color: #8f8776;
+  font-size: 12px;
+}
+
+.history-card-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.btn-history-load,
+.btn-history-delete,
+.btn-history-save,
+.btn-history-reset {
+  border-radius: 8px;
+  padding: 7px 12px;
+}
+
+.btn-history-load,
+.btn-history-save {
+  background: #231a00;
+  color: var(--accent);
+  border: 1px solid #7a5200;
+}
+
+.btn-history-load:hover,
+.btn-history-save:hover {
+  background: #302200;
+}
+
+.btn-history-delete {
+  background: #221214;
+  color: #ffb2b2;
+  border: 1px solid #8b4343;
+}
+
+.btn-history-delete:hover {
+  background: #31181c;
+}
+
+.btn-history-reset {
+  background: #151515;
+  color: var(--text-dim);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.btn-history-reset:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text);
 }
 
 .btn-menu,
@@ -643,6 +798,29 @@ body {
   color: var(--text-muted);
 }
 
+.history-save-panel {
+  display: grid;
+  gap: 10px;
+  margin-top: 12px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.history-save-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.history-save-status {
+  font-size: 12px;
+  color: var(--text-dim);
+}
+
 .translated-box {
   margin-top: 8px;
   background: #0a1c18;
@@ -873,6 +1051,13 @@ body {
   .grid-2 {
     grid-template-columns: 1fr;
   }
+
+  .history-save-header,
+  .history-card-head,
+  .history-card-actions {
+    align-items: flex-start;
+    flex-direction: column;
+  }
 }
 
 @media (max-width: 900px) {
@@ -918,7 +1103,10 @@ body {
   .login-brand,
   .login-card,
   .dashboard-hero,
-  .menu-card {
+  .menu-card,
+  .history-hero,
+  .history-panel,
+  .history-card {
     padding: 20px;
   }
 

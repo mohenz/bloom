@@ -20,6 +20,7 @@
 - 문장 연결 기능
 - 선택값 기반 영문 프롬프트 생성
 - 선택값 기반 영문 문장형 프롬프트 생성
+- Prompt History 저장, 불러오기, 수정, 삭제
 
 현재 기본 프런트는 외부 API 없이 동작합니다. 따라서 `ANTHROPIC_API_KEY` 없이도 영문 프롬프트를 생성할 수 있습니다.
 
@@ -32,14 +33,15 @@
 ## 일반 로그인 사전 작업
 
 1. Supabase SQL Editor 에 [docs/general_login_auth_schema.sql](./docs/general_login_auth_schema.sql) 내용을 실행합니다.
-2. 아래 명령으로 비밀번호 해시를 생성합니다.
+2. 이어서 [docs/prompt_history_schema.sql](./docs/prompt_history_schema.sql) 내용을 실행합니다.
+3. 아래 명령으로 비밀번호 해시를 생성합니다.
 
 ```bash
 node scripts/generate-password-hash.mjs "your-password"
 ```
 
-3. 생성된 해시를 사용해 `public.app_users` 에 초기 계정을 넣습니다.
-4. 배포 환경 변수에 아래 값을 설정합니다.
+4. 생성된 해시를 사용해 `public.app_users` 에 초기 계정을 넣습니다.
+5. 배포 환경 변수에 아래 값을 설정합니다.
 
 ```bash
 SUPABASE_URL=https://your-project.supabase.co
