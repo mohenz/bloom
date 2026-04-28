@@ -131,8 +131,10 @@
     const timeWeatherParts = [];
     const time = joinSelections(selections, 'time');
     const weather = joinSelections(selections, 'weather');
+    const season = joinSelections(selections, 'season');
     if (time) timeWeatherParts.push(time);
     if (weather) timeWeatherParts.push(weather);
+    if (season) timeWeatherParts.push(season);
     if (timeWeatherParts.length) parts.push(timeWeatherParts.join(' '));
 
     const atmosphereParts = [];
@@ -199,6 +201,7 @@
       .concat(translateSelections(selections, 'location-special'))
       .concat(translateSelections(selections, 'time'))
       .concat(translateSelections(selections, 'weather'))
+      .concat(translateSelections(selections, 'season'))
       .concat(translateSelections(selections, 'mood'))
       .concat(translateSelections(selections, 'lighting'))
       .concat(translateSelections(selections, 'pose'))
@@ -296,7 +299,8 @@
 
     const timeWeather = []
       .concat(getSelections(selections, 'time'))
-      .concat(getSelections(selections, 'weather'));
+      .concat(getSelections(selections, 'weather'))
+      .concat(getSelections(selections, 'season'));
     if (timeWeather.length) {
       sentences.push('시간과 계절감은 ' + formatList(timeWeather) + ' 기준으로 잡습니다.');
     }
@@ -383,6 +387,7 @@
       .concat(translateSelections(selections, 'location-special'))
       .concat(translateSelections(selections, 'time'))
       .concat(translateSelections(selections, 'weather'))
+      .concat(translateSelections(selections, 'season'))
       .concat(translateSelections(selections, 'mood'))
       .concat(translateSelections(selections, 'lighting'))
       .concat(translateSelections(selections, 'pose'))
