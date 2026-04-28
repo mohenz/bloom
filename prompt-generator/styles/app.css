@@ -518,6 +518,14 @@ body {
   background: #302200;
 }
 
+.menu-link,
+.topbar-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
 .btn-menu-disabled {
   background: #151515;
   color: #6c675d;
@@ -1055,6 +1063,133 @@ body {
   gap: 16px;
 }
 
+.blueprint-page {
+  background:
+    radial-gradient(circle at top right, rgba(240, 165, 0, 0.08), transparent 24%),
+    linear-gradient(180deg, #090909 0%, #0e0e0e 100%);
+}
+
+.blueprint-main {
+  display: grid;
+  gap: 24px;
+}
+
+.blueprint-hero {
+  margin-bottom: 0;
+}
+
+.blueprint-summary {
+  min-width: 320px;
+}
+
+.blueprint-panel {
+  margin-top: 0;
+}
+
+.blueprint-grid,
+.blueprint-columns {
+  display: grid;
+  gap: 16px;
+}
+
+.blueprint-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.blueprint-grid-tight {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.blueprint-card,
+.blueprint-checklist-card,
+.blueprint-step {
+  padding: 22px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: linear-gradient(180deg, rgba(16, 16, 16, 0.96), rgba(12, 12, 12, 0.96));
+}
+
+.blueprint-card {
+  display: grid;
+  gap: 12px;
+}
+
+.blueprint-card-kicker {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  color: var(--accent3);
+}
+
+.blueprint-card h3,
+.blueprint-checklist-card h3,
+.blueprint-step h3 {
+  font-size: 20px;
+}
+
+.blueprint-card p,
+.blueprint-checklist-card li,
+.blueprint-step p,
+.blueprint-note p {
+  color: var(--text-dim);
+  line-height: 1.75;
+}
+
+.blueprint-steps {
+  display: grid;
+  gap: 14px;
+}
+
+.blueprint-step {
+  display: grid;
+  grid-template-columns: 68px minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+
+.blueprint-step-index {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  border-radius: 14px;
+  background: rgba(240, 165, 0, 0.12);
+  border: 1px solid rgba(240, 165, 0, 0.28);
+  color: var(--accent);
+  font-family: 'Space Mono', monospace;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.blueprint-columns {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.blueprint-checklist {
+  display: grid;
+  gap: 10px;
+  margin-top: 12px;
+  padding-left: 18px;
+}
+
+.blueprint-note {
+  margin-top: 16px;
+  padding: 18px 20px;
+  border-radius: 18px;
+  background: rgba(240, 165, 0, 0.08);
+  border: 1px solid rgba(240, 165, 0, 0.22);
+}
+
+.blueprint-note strong {
+  color: var(--text);
+}
+
+code {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.92em;
+  color: var(--accent);
+}
+
 @media (min-width: 1200px) {
   .builder-workspace {
     grid-template-columns: minmax(0, 1fr) minmax(340px, var(--builder-sidebar-width));
@@ -1110,6 +1245,12 @@ body {
   .hero-summary {
     min-width: 0;
   }
+
+  .blueprint-grid,
+  .blueprint-grid-tight,
+  .blueprint-columns {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 720px) {
@@ -1141,7 +1282,10 @@ body {
   .menu-card,
   .history-hero,
   .history-panel,
-  .history-card {
+  .history-card,
+  .blueprint-card,
+  .blueprint-checklist-card,
+  .blueprint-step {
     padding: 20px;
   }
 
@@ -1151,5 +1295,9 @@ body {
 
   .builder-workspace {
     padding-bottom: 40px;
+  }
+
+  .blueprint-step {
+    grid-template-columns: 1fr;
   }
 }

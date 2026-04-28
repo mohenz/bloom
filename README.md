@@ -5,6 +5,7 @@
 ## 구조
 
 - `index.html`: 정적 앱 진입점
+- `projects/multi-pc-work-sync.html`: 멀티 PC 작업 연계 운영안을 정리한 정적 프로젝트 페이지
 - `prompt-generator/`: 스타일, 데이터, 도메인 로직, 서비스, 저장소, UI 모듈
 - `api/auth/*.js`: 일반 이메일/비밀번호 로그인 API
 - `api/translate.js`: 선택 사항인 Vercel Functions용 번역 API
