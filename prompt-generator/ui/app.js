@@ -81,6 +81,7 @@
     dom.loginAltActions = documentRef.getElementById('loginAltActions');
     dom.openHostedAppBtn = documentRef.getElementById('openHostedAppBtn');
     dom.guestPreviewBtn = documentRef.getElementById('guestPreviewBtn');
+    dom.topbarBrandLink = documentRef.getElementById('topbarBrandLink');
     dom.dashboardUserBadge = documentRef.getElementById('dashboardUserBadge');
     dom.builderUserBadge = documentRef.getElementById('builderUserBadge');
     dom.historyUserBadge = documentRef.getElementById('historyUserBadge');
@@ -1039,6 +1040,12 @@
     });
     dom.openHostedAppBtn.addEventListener('click', openHostedApp);
     dom.guestPreviewBtn.addEventListener('click', enterGuestPreview);
+    if (dom.topbarBrandLink) {
+      dom.topbarBrandLink.addEventListener('click', function onClick(event) {
+        event.preventDefault();
+        showDashboard();
+      });
+    }
     dom.dashboardLogoutBtn.addEventListener('click', handleLogout);
     dom.builderLogoutBtn.addEventListener('click', handleLogout);
     dom.historyLogoutBtn.addEventListener('click', handleLogout);
