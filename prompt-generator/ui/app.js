@@ -251,9 +251,30 @@
   function syncPromptFromSelections() {
     state.promptOutput = coreModule.buildPrompt(state.selections);
     dom.promptOutput.value = state.promptOutput;
-    clearSentenceText(false);
-    clearTranslatedText(false);
-    clearEnglishSentenceText(false);
+
+    if (state.promptOutput) {
+      state.sentenceText = coreModule.buildSentencePrompt(state.selections, state.promptOutput);
+      renderSentenceText(state.sentenceText);
+    } else {
+      clearSentenceText(false);
+    }
+
+    const englishPrompt = coreModule.buildEnglishPrompt(state.selections);
+    if (englishPrompt) {
+      state.translatedText = englishPrompt;
+      renderTranslatedText(englishPrompt);
+    } else {
+      clearTranslatedText(false);
+    }
+
+    const englishSentence = coreModule.buildEnglishSentencePrompt(state.selections);
+    if (englishSentence) {
+      state.englishSentenceText = englishSentence;
+      renderEnglishSentenceText(englishSentence);
+    } else {
+      clearEnglishSentenceText(false);
+    }
+
     persistPromptState();
   }
 
@@ -872,8 +893,9 @@
 
     if (!canUseAuthApi()) {
       authEnabled = false;
-      setLoginHelp('로그인은 배포 서버 또는 로컬 API 환경에서만 동작합니다.');
+      setLoginHelp('로컬 파일 환경입니다. 게스트로 둘러보기를 이용해 디자인을 확인하실 수 있습니다.');
       setLoginSubmitState(false);
+      showLoginAlternatives(true);
       return;
     }
 
@@ -893,8 +915,9 @@
         }
 
         authEnabled = false;
-        setLoginHelp('로그인 API를 찾지 못했습니다. Vercel 배포 환경에서 접속 중인지 확인하세요.');
+        setLoginHelp('로그인 API를 찾지 못했습니다. 게스트로 둘러보기를 이용해 디자인을 확인하실 수 있습니다.');
         setLoginSubmitState(false);
+        showLoginAlternatives(true);
         return;
       }
 
@@ -925,8 +948,9 @@
       }
 
       authEnabled = false;
-      setLoginHelp('로그인 서버와 연결하지 못했습니다. 배포 환경과 인증 설정을 확인하세요.');
+      setLoginHelp('로그인 서버와 연결하지 못했습니다. 게스트로 둘러보기를 이용해 디자인을 확인하실 수 있습니다.');
       setLoginSubmitState(false);
+      showLoginAlternatives(true);
     }
   }
 
