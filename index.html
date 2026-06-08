@@ -178,7 +178,7 @@
         <div class="flex gap-md">
           <div class="border-2 border-on-surface bg-surface-container-low p-md flex flex-col items-center justify-center min-w-[110px] text-center">
             <span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">활성 도구</span>
-            <strong class="font-headline-md text-headline-md text-primary mt-xs">6</strong>
+            <strong class="font-headline-md text-headline-md text-primary mt-xs">8</strong>
           </div>
           <div class="border-2 border-on-surface bg-surface-container-low p-md flex flex-col items-center justify-center min-w-[110px] text-center">
             <span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">예정 도구</span>
@@ -189,7 +189,124 @@
 
       <!-- Bento Grid Layout -->
       <section class="grid grid-cols-1 md:grid-cols-12 gap-gutter mb-xxl">
-        <!-- Card 1: Prompt Builder (Featured, col-span-8) -->
+
+        <!-- Card 1: Defect Manage (col-span-6) -->
+        <article class="md:col-span-6 bg-surface border-2 border-on-surface flex flex-col group transition-all duration-200 hover:translate-y-[-4px] hover:shadow-[4px_4px_0px_0px_rgba(26,28,30,1)]">
+          <div class="p-lg flex-1 flex flex-col justify-between min-h-[240px]">
+            <div>
+              <div class="flex flex-wrap gap-sm mb-md">
+                <span class="font-label-sm text-[10px] bg-secondary-fixed text-on-secondary-fixed px-sm py-unit border border-on-surface uppercase">Active</span>
+              </div>
+              <div class="flex items-center gap-sm mb-sm">
+                <span class="material-symbols-outlined text-primary text-[28px]" data-icon="bug_report">bug_report</span>
+                <h3 class="font-headline-md text-headline-md uppercase">Defect Manage</h3>
+              </div>
+              <p class="font-body-md text-body-md text-on-surface-variant mb-lg">
+                배포 및 서비스 운영 과정에서 발생하는 시스템 결함과 개선 요건을 효율적으로 기록하고 추적·관리하는 시스템입니다.
+              </p>
+            </div>
+            <a class="bg-white text-on-surface px-lg py-md font-label-md text-label-md border-2 border-on-surface btn-hover-effect w-fit text-center block flex items-center justify-center gap-sm" href="https://defect-manage.vercel.app/" target="_blank" rel="noopener noreferrer">
+              열기
+              <span class="material-symbols-outlined text-[18px]" data-icon="arrow_outward">arrow_outward</span>
+            </a>
+          </div>
+        </article>
+
+        <!-- Card 2: UI Code Helper (col-span-6) -->
+        <article class="md:col-span-6 bg-surface border-2 border-on-surface flex flex-col group transition-all duration-200 hover:translate-y-[-4px] hover:shadow-[4px_4px_0px_0px_rgba(26,28,30,1)]">
+          <div class="p-lg flex-1 flex flex-col justify-between min-h-[240px]">
+            <div>
+              <div class="flex flex-wrap gap-sm mb-md">
+                <span class="font-label-sm text-[10px] bg-secondary-fixed text-on-secondary-fixed px-sm py-unit border border-on-surface uppercase">Active</span>
+              </div>
+              <div class="flex items-center gap-sm mb-sm">
+                <span class="material-symbols-outlined text-primary text-[28px]" data-icon="extension">extension</span>
+                <h3 class="font-headline-md text-headline-md uppercase">UI Code Helper</h3>
+              </div>
+              <p class="font-body-md text-body-md text-on-surface-variant mb-lg">
+                브라우저 화면에서 HTML 요소를 직접 선택하여 Markdown 기반의 코드 변경 요청서를 생성하는 개발 지원용 Chrome 확장 프로그램입니다.
+              </p>
+            </div>
+            <div class="flex flex-wrap gap-sm">
+              <a class="bg-white text-on-surface px-lg py-md font-label-md text-label-md border-2 border-on-surface btn-hover-effect w-fit flex items-center gap-sm" href="/api/view-manual" target="_blank" rel="noopener noreferrer">
+                매뉴얼 열기
+                <span class="material-symbols-outlined text-[18px]" data-icon="arrow_outward">arrow_outward</span>
+              </a>
+              <a class="bg-primary text-on-primary px-lg py-md font-label-md text-label-md border-2 border-on-surface btn-hover-effect w-fit flex items-center gap-sm" href="/api/download?name=ui_code_helper.zip" download>
+                다운로드
+                <span class="material-symbols-outlined text-[18px]" data-icon="download">download</span>
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 3: CineTube (col-span-4) -->
+        <article class="md:col-span-4 bg-surface border-2 border-on-surface flex flex-col group transition-all duration-200 hover:translate-y-[-4px] hover:shadow-[4px_4px_0px_0px_rgba(26,28,30,1)]">
+          <div class="p-lg flex-1 flex flex-col justify-between min-h-[240px]">
+            <div>
+              <div class="flex flex-wrap gap-sm mb-md">
+                <span class="font-label-sm text-[10px] bg-secondary-fixed text-on-secondary-fixed px-sm py-unit border border-on-surface uppercase">Active</span>
+              </div>
+              <div class="flex items-center gap-sm mb-sm">
+                <span class="material-symbols-outlined text-primary text-[28px]" data-icon="movie">movie</span>
+                <h3 class="font-headline-md text-headline-md uppercase">CineTube</h3>
+              </div>
+              <p class="font-body-md text-body-md text-on-surface-variant mb-lg">
+                나만을 위해 비밀스럽게 운영하는 프리미엄 프라이빗 영화 정보 보관소 및 아카이브입니다.
+              </p>
+            </div>
+            <a class="bg-white text-on-surface px-lg py-md font-label-md text-label-md border-2 border-on-surface btn-hover-effect w-fit text-center block flex items-center justify-center gap-sm" href="https://cinetube-gray.vercel.app/" target="_blank" rel="noopener noreferrer">
+              열기
+              <span class="material-symbols-outlined text-[18px]" data-icon="arrow_outward">arrow_outward</span>
+            </a>
+          </div>
+        </article>
+
+        <!-- Card 4: Work Sync (col-span-4) -->
+        <article class="md:col-span-4 bg-surface border-2 border-on-surface flex flex-col group transition-all duration-200 hover:translate-y-[-4px] hover:shadow-[4px_4px_0px_0px_rgba(26,28,30,1)]">
+          <div class="p-lg flex-1 flex flex-col justify-between min-h-[240px]">
+            <div>
+              <div class="flex flex-wrap gap-sm mb-md">
+                <span class="font-label-sm text-[10px] bg-secondary-fixed text-on-secondary-fixed px-sm py-unit border border-on-surface uppercase">Active</span>
+              </div>
+              <div class="flex items-center gap-sm mb-sm">
+                <span class="material-symbols-outlined text-primary text-[28px]" data-icon="sync">sync</span>
+                <h3 class="font-headline-md text-headline-md uppercase">Work Sync</h3>
+              </div>
+              <p class="font-body-md text-body-md text-on-surface-variant mb-lg">
+                멀티 PC handoff / sync / automation 기준을 정리한 프로젝트입니다.
+              </p>
+            </div>
+            <a class="bg-white text-on-surface px-lg py-md font-label-md text-label-md border-2 border-on-surface btn-hover-effect w-fit text-center block flex items-center justify-center gap-sm" href="./projects/multi-pc-work-sync.html">
+              열기
+              <span class="material-symbols-outlined text-[18px]" data-icon="arrow_outward">arrow_outward</span>
+            </a>
+          </div>
+        </article>
+
+        <!-- Card 5: Web Perf Extension (col-span-4) -->
+        <article class="md:col-span-4 bg-surface border-2 border-on-surface flex flex-col group transition-all duration-200 hover:translate-y-[-4px] hover:shadow-[4px_4px_0px_0px_rgba(26,28,30,1)]">
+          <div class="p-lg flex-1 flex flex-col justify-between min-h-[240px]">
+            <div>
+              <div class="flex flex-wrap gap-sm mb-md">
+                <span class="font-label-sm text-[10px] bg-secondary-fixed text-on-secondary-fixed px-sm py-unit border border-on-surface uppercase">Active</span>
+              </div>
+              <div class="flex items-center gap-sm mb-sm">
+                <span class="material-symbols-outlined text-primary text-[28px]" data-icon="speed">speed</span>
+                <h3 class="font-headline-md text-headline-md uppercase">Web Perf Extension</h3>
+              </div>
+              <p class="font-body-md text-body-md text-on-surface-variant mb-lg">
+                웹사이트 로딩 속도를 빠르게 측정하는 Chrome 확장 프로그램입니다. TTFB·FCP·LCP·Load 등 핵심 지표와 아이콘 배지 자동 표시를 지원합니다.
+              </p>
+            </div>
+            <a class="bg-primary text-on-primary px-lg py-md font-label-md text-label-md border-2 border-on-surface btn-hover-effect w-fit flex items-center gap-sm" href="/api/download?name=web_perf_extension.zip" download>
+              다운로드
+              <span class="material-symbols-outlined text-[18px]" data-icon="download">download</span>
+            </a>
+          </div>
+        </article>
+
+        <!-- Card 6: Prompt Builder (Featured, col-span-8) -->
         <article class="md:col-span-8 bg-surface border-2 border-on-surface flex flex-col group transition-all duration-200 hover:translate-y-[-4px] hover:shadow-[4px_4px_0px_0px_rgba(26,28,30,1)]">
           <div class="p-lg flex-1 flex flex-col justify-between min-h-[260px]">
             <div>
@@ -212,29 +329,7 @@
           </div>
         </article>
 
-        <!-- Card 2: CineTube (col-span-4) -->
-        <article class="md:col-span-4 bg-surface border-2 border-on-surface flex flex-col group transition-all duration-200 hover:translate-y-[-4px] hover:shadow-[4px_4px_0px_0px_rgba(26,28,30,1)]">
-          <div class="p-lg flex-1 flex flex-col justify-between min-h-[260px]">
-            <div>
-              <div class="flex flex-wrap gap-sm mb-md">
-                <span class="font-label-sm text-[10px] bg-secondary-fixed text-on-secondary-fixed px-sm py-unit border border-on-surface uppercase">Active</span>
-              </div>
-              <div class="flex items-center gap-sm mb-sm">
-                <span class="material-symbols-outlined text-primary text-[28px]" data-icon="movie">movie</span>
-                <h3 class="font-headline-md text-headline-md uppercase">CineTube</h3>
-              </div>
-              <p class="font-body-md text-body-md text-on-surface-variant mb-lg">
-                나만을 위해 비밀스럽게 운영하는 프리미엄 프라이빗 영화 정보 보관소 및 아카이브입니다.
-              </p>
-            </div>
-            <a class="bg-white text-on-surface px-lg py-md font-label-md text-label-md border-2 border-on-surface btn-hover-effect w-fit text-center block flex items-center justify-center gap-sm" href="https://cinetube-gray.vercel.app/" target="_blank" rel="noopener noreferrer">
-              열기
-              <span class="material-symbols-outlined text-[18px]" data-icon="arrow_outward">arrow_outward</span>
-            </a>
-          </div>
-        </article>
-
-        <!-- Card 3: Prompt History (col-span-4) -->
+        <!-- Card 7: Prompt History (col-span-4) -->
         <article class="md:col-span-4 bg-surface border-2 border-on-surface flex flex-col group transition-all duration-200 hover:translate-y-[-4px] hover:shadow-[4px_4px_0px_0px_rgba(26,28,30,1)]">
           <div class="p-lg flex-1 flex flex-col justify-between min-h-[240px]">
             <div>
@@ -256,7 +351,7 @@
           </div>
         </article>
 
-        <!-- Card 4: Story (col-span-4) -->
+        <!-- Card 8: Story (col-span-4) -->
         <article class="md:col-span-4 bg-surface border-2 border-on-surface flex flex-col group transition-all duration-200 hover:translate-y-[-4px] hover:shadow-[4px_4px_0px_0px_rgba(26,28,30,1)]">
           <div class="p-lg flex-1 flex flex-col justify-between min-h-[240px]">
             <div>
@@ -278,101 +373,6 @@
           </div>
         </article>
 
-        <!-- Card 5: Work Sync Blueprint (col-span-4) -->
-        <article class="md:col-span-4 bg-surface border-2 border-on-surface flex flex-col group transition-all duration-200 hover:translate-y-[-4px] hover:shadow-[4px_4px_0px_0px_rgba(26,28,30,1)]">
-          <div class="p-lg flex-1 flex flex-col justify-between min-h-[240px]">
-            <div>
-              <div class="flex flex-wrap gap-sm mb-md">
-                <span class="font-label-sm text-[10px] bg-secondary-fixed text-on-secondary-fixed px-sm py-unit border border-on-surface uppercase">Active</span>
-              </div>
-              <div class="flex items-center gap-sm mb-sm">
-                <span class="material-symbols-outlined text-primary text-[28px]" data-icon="sync">sync</span>
-                <h3 class="font-headline-md text-headline-md uppercase">Work Sync</h3>
-              </div>
-              <p class="font-body-md text-body-md text-on-surface-variant mb-lg">
-                멀티 PC handoff / sync / automation 기준을 정리한 프로젝트입니다.
-              </p>
-            </div>
-            <a class="bg-white text-on-surface px-lg py-md font-label-md text-label-md border-2 border-on-surface btn-hover-effect w-fit text-center block flex items-center justify-center gap-sm" href="./projects/multi-pc-work-sync.html">
-              열기
-              <span class="material-symbols-outlined text-[18px]" data-icon="arrow_outward">arrow_outward</span>
-            </a>
-          </div>
-        </article>
-
-        <!-- Card 6: Defect Manage (col-span-6) -->
-        <article class="md:col-span-6 bg-surface border-2 border-on-surface flex flex-col group transition-all duration-200 hover:translate-y-[-4px] hover:shadow-[4px_4px_0px_0px_rgba(26,28,30,1)]">
-          <div class="p-lg flex-1 flex flex-col justify-between min-h-[240px]">
-            <div>
-              <div class="flex flex-wrap gap-sm mb-md">
-                <span class="font-label-sm text-[10px] bg-secondary-fixed text-on-secondary-fixed px-sm py-unit border border-on-surface uppercase">Active</span>
-              </div>
-              <div class="flex items-center gap-sm mb-sm">
-                <span class="material-symbols-outlined text-primary text-[28px]" data-icon="bug_report">bug_report</span>
-                <h3 class="font-headline-md text-headline-md uppercase">Defect Manage</h3>
-              </div>
-              <p class="font-body-md text-body-md text-on-surface-variant mb-lg">
-                배포 및 서비스 운영 과정에서 발생하는 시스템 결함과 개선 요건을 효율적으로 기록하고 추적·관리하는 시스템입니다.
-              </p>
-            </div>
-            <a class="bg-white text-on-surface px-lg py-md font-label-md text-label-md border-2 border-on-surface btn-hover-effect w-fit text-center block flex items-center justify-center gap-sm" href="https://defect-manage.vercel.app/" target="_blank" rel="noopener noreferrer">
-              열기
-              <span class="material-symbols-outlined text-[18px]" data-icon="arrow_outward">arrow_outward</span>
-            </a>
-          </div>
-        </article>
-
-        <!-- Card 7: UI Code Helper (col-span-6) -->
-        <article class="md:col-span-6 bg-surface border-2 border-on-surface flex flex-col group transition-all duration-200 hover:translate-y-[-4px] hover:shadow-[4px_4px_0px_0px_rgba(26,28,30,1)]">
-          <div class="p-lg flex-1 flex flex-col justify-between min-h-[240px]">
-            <div>
-              <div class="flex flex-wrap gap-sm mb-md">
-                <span class="font-label-sm text-[10px] bg-secondary-fixed text-on-secondary-fixed px-sm py-unit border border-on-surface uppercase">Active</span>
-              </div>
-              <div class="flex items-center gap-sm mb-sm">
-                <span class="material-symbols-outlined text-primary text-[28px]" data-icon="extension">extension</span>
-                <h3 class="font-headline-md text-headline-md uppercase">UI Code Helper</h3>
-              </div>
-              <p class="font-body-md text-body-md text-on-surface-variant mb-lg">
-                브라우저 화면에서 HTML 요소를 직접 선택하여 Markdown 기반의 코드 변경 요청서를 생성하는 개발 지원용 Chrome 확장 프로그램입니다.
-              </p>
-            </div>
-            <div class="flex flex-wrap gap-sm">
-              <a class="bg-white text-on-surface px-lg py-md font-label-md text-label-md border-2 border-on-surface btn-hover-effect w-fit flex items-center gap-sm" href="/api/view-manual" target="_blank" rel="noopener noreferrer">
-                매뉴얼 열기
-                <span class="material-symbols-outlined text-[18px]" data-icon="arrow_outward">arrow_outward</span>
-              </a>
-              <a class="bg-primary text-on-primary px-lg py-md font-label-md text-label-md border-2 border-on-surface btn-hover-effect w-fit flex items-center gap-sm" href="/api/download?name=ui_code_helper.zip" download>
-                확장 프로그램 다운로드
-                <span class="material-symbols-outlined text-[18px]" data-icon="download">download</span>
-              </a>
-            </div>
-          </div>
-        </article>
-
-        <!-- Card 8: Web Perf Extension (col-span-6) -->
-        <article class="md:col-span-6 bg-surface border-2 border-on-surface flex flex-col group transition-all duration-200 hover:translate-y-[-4px] hover:shadow-[4px_4px_0px_0px_rgba(26,28,30,1)]">
-          <div class="p-lg flex-1 flex flex-col justify-between min-h-[240px]">
-            <div>
-              <div class="flex flex-wrap gap-sm mb-md">
-                <span class="font-label-sm text-[10px] bg-secondary-fixed text-on-secondary-fixed px-sm py-unit border border-on-surface uppercase">Active</span>
-              </div>
-              <div class="flex items-center gap-sm mb-sm">
-                <span class="material-symbols-outlined text-primary text-[28px]" data-icon="speed">speed</span>
-                <h3 class="font-headline-md text-headline-md uppercase">Web Perf Extension</h3>
-              </div>
-              <p class="font-body-md text-body-md text-on-surface-variant mb-lg">
-                웹사이트 로딩 속도를 빠르게 측정하는 Chrome 확장 프로그램입니다. TTFB·FCP·LCP·Load 등 핵심 지표와 아이콘 배지 자동 표시를 지원합니다.
-              </p>
-            </div>
-            <div class="flex flex-wrap gap-sm">
-              <a class="bg-primary text-on-primary px-lg py-md font-label-md text-label-md border-2 border-on-surface btn-hover-effect w-fit flex items-center gap-sm" href="/api/download?name=web_perf_extension.zip" download>
-                확장 프로그램 다운로드
-                <span class="material-symbols-outlined text-[18px]" data-icon="download">download</span>
-              </a>
-            </div>
-          </div>
-        </article>
       </section>
     </main>
   </section>
