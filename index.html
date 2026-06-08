@@ -26,7 +26,7 @@
           "on-secondary-fixed-variant": "#3c475a",
           "inverse-primary": "#b3c5ff",
           "inverse-surface": "#2f3133",
-          "background": "#f9f9fc",
+          "background": "#e8e8ea",
           "surface-container-highest": "#e2e2e5",
           "outline": "#757682",
           "on-tertiary-container": "#d37758",
@@ -157,7 +157,6 @@
           <a href="#" class="hover:text-primary transition-colors duration-200" id="topbarBrandLink">BLOOM UNIVERSE</a>
         </div>
         <div class="flex items-center gap-md">
-          <span class="font-label-sm text-label-sm bg-secondary-container text-on-secondary-container px-sm py-unit border border-on-surface font-bold flex items-center gap-xs" id="dashboardUserBadge"></span>
           <button class="border-2 border-on-surface px-md py-sm font-label-sm text-label-sm hover:bg-surface-container-low transition-all bg-white font-bold" id="dashboardLogoutBtn" type="button">로그아웃</button>
         </div>
       </nav>
@@ -338,10 +337,16 @@
                 브라우저 화면에서 HTML 요소를 직접 선택하여 Markdown 기반의 코드 변경 요청서를 생성하는 개발 지원용 Chrome 확장 프로그램입니다.
               </p>
             </div>
-            <a class="bg-white text-on-surface px-lg py-md font-label-md text-label-md border-2 border-on-surface btn-hover-effect w-fit text-center block flex items-center justify-center gap-sm" href="/api/view-manual" target="_blank" rel="noopener noreferrer">
-              매뉴얼 열기
-              <span class="material-symbols-outlined text-[18px]" data-icon="arrow_outward">arrow_outward</span>
-            </a>
+            <div class="flex flex-wrap gap-sm">
+              <a class="bg-white text-on-surface px-lg py-md font-label-md text-label-md border-2 border-on-surface btn-hover-effect w-fit flex items-center gap-sm" href="/api/view-manual" target="_blank" rel="noopener noreferrer">
+                매뉴얼 열기
+                <span class="material-symbols-outlined text-[18px]" data-icon="arrow_outward">arrow_outward</span>
+              </a>
+              <a class="bg-primary text-on-primary px-lg py-md font-label-md text-label-md border-2 border-on-surface btn-hover-effect w-fit flex items-center gap-sm" href="/api/download?name=ui_code_helper.zip" download>
+                확장 프로그램 다운로드
+                <span class="material-symbols-outlined text-[18px]" data-icon="download">download</span>
+              </a>
+            </div>
           </div>
         </article>
       </section>
@@ -350,6 +355,6 @@
 </div>
 
 <!-- Dynamic App Scripts -->
-<script type="module" src="./prompt-generator/ui/dashboard.js?v=story1"></script>
+<script type="module" src="./prompt-generator/ui/dashboard.js?v=story2"></script>
 </body>
 </html>

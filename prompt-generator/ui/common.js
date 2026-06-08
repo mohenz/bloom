@@ -71,18 +71,11 @@ export async function handleLogout() {
     console.warn('Logout API error:', error);
   }
 
-  window.location.href = './login.html';
+  // ?logout=1 플래그로 login.js의 자동 리다이렉트를 차단
+  window.location.href = './login.html?logout=1';
 }
 
 export function bindCommonNavbar(user, isGuest) {
-  // Bind Badges
-  const label = user ? (user.displayName || buildFallbackName(user.email)) : '';
-  const badges = ['dashboardUserBadge', 'builderUserBadge', 'historyUserBadge', 'storyUserBadge'];
-  badges.forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.textContent = label;
-  });
-
   // Bind Logout buttons
   const logoutButtons = ['dashboardLogoutBtn', 'builderLogoutBtn', 'historyLogoutBtn', 'storyLogoutBtn'];
   logoutButtons.forEach(id => {
@@ -93,6 +86,7 @@ export function bindCommonNavbar(user, isGuest) {
     }
   });
 }
+
 
 export async function checkSessionOrRedirect() {
   const isGuestSession = sessionStorage.getItem('bloom_guest_session') === 'true';

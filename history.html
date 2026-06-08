@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bloom Universe - 프롬프트 히스토리</title>
+<title>Bloom Universe - ?꾨＼?꾪듃 ?덉뒪?좊━</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2311110f'/%3E%3Cpath d='M18 44V20h12.5c7.3 0 11.5 3.8 11.5 9.6 0 4.8-2.8 8.1-7.4 9.5L44 44h-8.3l-8.1-4.2H26V44h-8zm8-10.4h4.1c2.7 0 4.2-1.3 4.2-3.6s-1.5-3.5-4.2-3.5H26v7.1z' fill='%23f0a500'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -26,7 +26,7 @@
           "on-secondary-fixed-variant": "#3c475a",
           "inverse-primary": "#b3c5ff",
           "inverse-surface": "#2f3133",
-          "background": "#f9f9fc",
+          "background": "#e8e8ea",
           "surface-container-highest": "#e2e2e5",
           "outline": "#757682",
           "on-tertiary-container": "#d37758",
@@ -157,11 +157,10 @@
           <span>PROMPT HISTORY</span>
         </div>
         <div class="flex items-center gap-md">
-          <a class="border-2 border-on-surface px-md py-sm font-label-sm text-label-sm hover:bg-surface-container-low transition-all bg-white font-bold block text-center" href="./index.html">메인으로</a>
-          <a class="border-2 border-on-surface px-md py-sm font-label-sm text-label-sm hover:bg-surface-container-low transition-all bg-white font-bold block text-center" href="./builder.html">Builder 열기</a>
-          <button class="border-2 border-on-surface px-md py-sm font-label-sm text-label-sm hover:bg-surface-container-low transition-all bg-white font-bold" id="refreshHistoryBtn" type="button">새로고침</button>
-          <span class="font-label-sm text-label-sm bg-secondary-container text-on-secondary-container px-sm py-unit border border-on-surface font-bold flex items-center gap-xs" id="historyUserBadge"></span>
-          <button class="border-2 border-on-surface px-md py-sm font-label-sm text-label-sm hover:bg-surface-container-low transition-all bg-white font-bold" id="historyLogoutBtn" type="button">로그아웃</button>
+          <a class="border-2 border-on-surface px-md py-sm font-label-sm text-label-sm hover:bg-surface-container-low transition-all bg-white font-bold block text-center" href="./index.html">硫붿씤?쇰줈</a>
+          <a class="border-2 border-on-surface px-md py-sm font-label-sm text-label-sm hover:bg-surface-container-low transition-all bg-white font-bold block text-center" href="./builder.html">Builder ?닿린</a>
+          <button class="border-2 border-on-surface px-md py-sm font-label-sm text-label-sm hover:bg-surface-container-low transition-all bg-white font-bold" id="refreshHistoryBtn" type="button">?덈줈怨좎묠</button>
+          <button class="border-2 border-on-surface px-md py-sm font-label-sm text-label-sm hover:bg-surface-container-low transition-all bg-white font-bold" id="historyLogoutBtn" type="button">濡쒓렇?꾩썐</button>
         </div>
       </nav>
     </header>
@@ -174,7 +173,7 @@
           Prompt Archive
         </h2>
         <p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">
-          생성한 프롬프트를 생성일시 기준으로 저장하고 불러와 수정하거나 삭제합니다.
+          ?앹꽦???꾨＼?꾪듃瑜??앹꽦?쇱떆 湲곗??쇰줈 ??ν븯怨?遺덈윭? ?섏젙?섍굅????젣?⑸땲??
         </p>
       </section>
 
@@ -184,9 +183,9 @@
             <span class="material-symbols-outlined text-primary text-[28px]" data-icon="history">history</span>
             Saved Items
           </div>
-          <p class="font-label-sm text-[12.5px] text-on-surface-variant mt-xs font-mono" id="historyStatus">저장된 프롬프트를 불러오는 중입니다.</p>
+          <p class="font-label-sm text-[12.5px] text-on-surface-variant mt-xs font-mono" id="historyStatus">??λ맂 ?꾨＼?꾪듃瑜?遺덈윭?ㅻ뒗 以묒엯?덈떎.</p>
         </div>
-        <p class="font-body-md text-body-md text-on-surface-variant py-lg text-center" id="historyEmpty">저장된 프롬프트가 없습니다. Prompt Builder에서 저장을 먼저 진행해주세요.</p>
+        <p class="font-body-md text-body-md text-on-surface-variant py-lg text-center" id="historyEmpty">??λ맂 ?꾨＼?꾪듃媛 ?놁뒿?덈떎. Prompt Builder?먯꽌 ??μ쓣 癒쇱? 吏꾪뻾?댁＜?몄슂.</p>
         
         <div class="space-y-md" id="historyList"></div>
       </section>
@@ -195,12 +194,12 @@
 </div>
 
 <!-- Copy Toast Notification -->
-<div class="copy-toast" id="copyToast">✓ 복사됨</div>
+<div class="copy-toast" id="copyToast">??蹂듭궗??/div>
 
 <!-- Dynamic App Scripts -->
 <script defer src="./prompt-generator/data/prompt-data.js?v=20260413a"></script>
 <script defer src="./prompt-generator/storage/selection-storage.js?v=20260413a"></script>
 <script defer src="./prompt-generator/features/prompt-history.js?v=20260413a"></script>
-<script type="module" src="./prompt-generator/ui/history.js?v=story1"></script>
+<script type="module" src="./prompt-generator/ui/history.js?v=story2"></script>
 </body>
 </html>

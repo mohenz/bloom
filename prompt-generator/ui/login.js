@@ -257,8 +257,14 @@ async function initializeAuth() {
     showLoginAlternatives(false);
 
     if (payload.authenticated && payload.user) {
-      // Already logged in, redirect to dashboard
-      window.location.href = './index.html';
+      // 로그아웃 직후 진입한 경우(쿠키가 아직 살아있을 수 있음) 자동 리다이렉트 차단
+      const isJustLoggedOut = new URLSearchParams(window.location.search).get('logout') === '1';
+      if (!isJustLoggedOut) {
+        window.location.href = './index.html';
+      } else {
+        // 로그아웃 플래그가 있으면 URL을 깔끔하게 정리하고 로그인 폼 표시 유지
+        history.replaceState(null, '', './login.html');
+      }
     }
   } catch (error) {
     if (isGitHubPagesPreview()) {
