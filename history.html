@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ko" class="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bloom Universe - 프롬프트 히스토리</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2311110f'/%3E%3Cpath d='M18 44V20h12.5c7.3 0 11.5 3.8 11.5 9.6 0 4.8-2.8 8.1-7.4 9.5L44 44h-8.3l-8.1-4.2H26V44h-8zm8-10.4h4.1c2.7 0 4.2-1.3 4.2-3.6s-1.5-3.5-4.2-3.5H26v7.1z' fill='%23f0a500'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@100..800&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind Play CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+          "on-primary": "#ffffff",
+          "secondary-fixed": "#d8e3fa",
+          "on-tertiary": "#ffffff",
+          "primary-fixed-dim": "#b3c5ff",
+          "secondary-container": "#d5e0f7",
+          "on-secondary-fixed-variant": "#3c475a",
+          "inverse-primary": "#b3c5ff",
+          "inverse-surface": "#2f3133",
+          "background": "#f9f9fc",
+          "surface-container-highest": "#e2e2e5",
+          "outline": "#757682",
+          "on-tertiary-container": "#d37758",
+          "on-primary-container": "#758dd5",
+          "outline-variant": "#c5c6d2",
+          "surface-dim": "#dadadc",
+          "on-background": "#1a1c1e",
+          "tertiary-fixed-dim": "#ffb59e",
+          "tertiary-container": "#501300",
+          "primary": "#00113a",
+          "inverse-on-surface": "#f0f0f3",
+          "on-surface": "#1a1c1e",
+          "surface-tint": "#435b9f",
+          "on-surface-variant": "#444650",
+          "on-primary-fixed": "#00174a",
+          "primary-fixed": "#dbe1ff",
+          "surface-container-lowest": "#ffffff",
+          "error": "#ba1a1a",
+          "surface-container": "#eeeef0",
+          "on-error-container": "#93000a",
+          "secondary": "#545f72",
+          "surface-bright": "#f9f9fc",
+          "on-tertiary-fixed-variant": "#783018",
+          "error-container": "#ffdad6",
+          "on-secondary-fixed": "#111c2c",
+          "primary-container": "#002366",
+          "on-error": "#ffffff",
+          "tertiary-fixed": "#ffdbd0",
+          "on-primary-fixed-variant": "#2a4386",
+          "surface-container-high": "#e8e8ea",
+          "on-tertiary-fixed": "#390b00",
+          "surface-container-low": "#f3f3f6",
+          "tertiary": "#2d0700",
+          "surface-variant": "#e2e2e5",
+          "on-secondary-container": "#586377",
+          "on-secondary": "#ffffff",
+          "secondary-fixed-dim": "#bcc7dd",
+          "surface": "#ffffff",
+          "border": "#1a1c1e",
+          "primary-container-light": "#e0e6f0"
+        },
+        "borderRadius": {
+          "DEFAULT": "0px",
+          "lg": "0px",
+          "xl": "0px",
+          "full": "9999px"
+        },
+        "spacing": {
+          "xxl": "80px",
+          "lg": "24px",
+          "gutter": "24px",
+          "md": "16px",
+          "sm": "8px",
+          "unit": "4px",
+          "xs": "4px",
+          "xl": "48px",
+          "margin-desktop": "64px",
+          "margin-mobile": "16px"
+        },
+        "fontFamily": {
+          "headline-lg": ["IBM Plex Sans", "Noto Sans KR", "sans-serif"],
+          "body-md": ["IBM Plex Sans", "Noto Sans KR", "sans-serif"],
+          "headline-md": ["IBM Plex Sans", "Noto Sans KR", "sans-serif"],
+          "label-sm": ["JetBrains Mono", "monospace"],
+          "body-lg": ["IBM Plex Sans", "Noto Sans KR", "sans-serif"],
+          "display-lg-mobile": ["IBM Plex Sans", "Noto Sans KR", "sans-serif"],
+          "label-md": ["JetBrains Mono", "monospace"],
+          "display-lg": ["IBM Plex Sans", "Noto Sans KR", "sans-serif"]
+        },
+        "fontSize": {
+          "headline-lg": ["32px", {"lineHeight": "1.2", "fontWeight": "600"}],
+          "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+          "headline-md": ["24px", {"lineHeight": "1.2", "fontWeight": "600"}],
+          "label-sm": ["12px", {"lineHeight": "1.4", "fontWeight": "500"}],
+          "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+          "display-lg-mobile": ["40px", {"lineHeight": "1.1", "fontWeight": "700"}],
+          "label-md": ["14px", {"lineHeight": "1.4", "letterSpacing": "0.05em", "fontWeight": "500"}],
+          "display-lg": ["64px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+        }
+      },
+    },
+  }
+</script>
+<style>
+  /* Zero radius policy enforcement */
+  * { border-radius: 0px !important; }
+  .hard-shadow {
+    box-shadow: 4px 4px 0px 0px #1a1c1e;
+  }
+  .hard-shadow-md {
+    box-shadow: 6px 6px 0px 0px #1a1c1e;
+  }
+  .hard-shadow-lg {
+    box-shadow: 8px 8px 0px 0px #1a1c1e;
+  }
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    vertical-align: middle;
+  }
+  ::selection {
+    background-color: #002366;
+    color: white;
+  }
+  /* Button hover scale-effect matching Stitch code */
+  .btn-hover-effect {
+    transition: all 0.15s ease-in-out;
+  }
+  .btn-hover-effect:hover {
+    transform: translate(-4px, -4px);
+    box-shadow: 4px 4px 0px 0px #1a1c1e;
+  }
+  .btn-hover-effect:active {
+    transform: translate(1px, 1px);
+    box-shadow: 1px 1px 0px 0px #1a1c1e;
+  }
+</style>
+<link rel="stylesheet" href="./prompt-generator/styles/app.css?v=20260608c">
+</head>
+<body class="bg-background text-on-surface antialiased font-body-md min-h-screen pb-xxl">
+
+<div class="service-shell min-h-screen flex flex-col justify-between">
+  <!-- PROMPT HISTORY SCREEN -->
+  <section class="screen prompt-history-screen" id="promptHistoryScreen">
+    <header class="bg-surface w-full border-b-2 border-on-surface sticky top-0 z-50">
+      <nav class="flex justify-between items-center max-w-[1280px] mx-auto px-lg md:px-margin-desktop py-md w-full">
+        <div class="font-headline-md text-headline-md font-bold text-on-surface tracking-tighter flex items-center gap-sm">
+          <span class="material-symbols-outlined text-primary" data-icon="history">history</span>
+          <span>PROMPT HISTORY</span>
+        </div>
+        <div class="flex items-center gap-md">
+          <a class="border-2 border-on-surface px-md py-sm font-label-sm text-label-sm hover:bg-surface-container-low transition-all bg-white font-bold block text-center" href="./index.html">메인으로</a>
+          <a class="border-2 border-on-surface px-md py-sm font-label-sm text-label-sm hover:bg-surface-container-low transition-all bg-white font-bold block text-center" href="./builder.html">Builder 열기</a>
+          <button class="border-2 border-on-surface px-md py-sm font-label-sm text-label-sm hover:bg-surface-container-low transition-all bg-white font-bold" id="refreshHistoryBtn" type="button">새로고침</button>
+          <span class="font-label-sm text-label-sm bg-secondary-container text-on-secondary-container px-sm py-unit border border-on-surface font-bold flex items-center gap-xs" id="historyUserBadge"></span>
+          <button class="border-2 border-on-surface px-md py-sm font-label-sm text-label-sm hover:bg-surface-container-low transition-all bg-white font-bold" id="historyLogoutBtn" type="button">로그아웃</button>
+        </div>
+      </nav>
+    </header>
+
+    <main class="max-w-[1280px] mx-auto px-lg md:px-margin-desktop py-xl">
+      <!-- Hero Section -->
+      <section class="pb-xl border-b-2 border-on-surface mb-xl">
+        <p class="font-label-sm text-label-sm text-on-surface-variant opacity-75 tracking-wider block mb-xs uppercase font-mono">Archive Manager</p>
+        <h2 class="font-display-lg text-display-lg-mobile md:text-display-lg leading-[0.9] mb-md uppercase">
+          Prompt Archive
+        </h2>
+        <p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">
+          생성한 프롬프트를 생성일시 기준으로 저장하고 불러와 수정하거나 삭제합니다.
+        </p>
+      </section>
+
+      <section class="bg-surface border-2 border-on-surface p-xl hard-shadow">
+        <div class="mb-lg border-b border-outline-variant pb-md">
+          <div class="font-headline-md text-headline-md font-bold flex items-center gap-sm uppercase">
+            <span class="material-symbols-outlined text-primary text-[28px]" data-icon="history">history</span>
+            Saved Items
+          </div>
+          <p class="font-label-sm text-[12.5px] text-on-surface-variant mt-xs font-mono" id="historyStatus">저장된 프롬프트를 불러오는 중입니다.</p>
+        </div>
+        <p class="font-body-md text-body-md text-on-surface-variant py-lg text-center" id="historyEmpty">저장된 프롬프트가 없습니다. Prompt Builder에서 저장을 먼저 진행해주세요.</p>
+        
+        <div class="space-y-md" id="historyList"></div>
+      </section>
+    </main>
+  </section>
+</div>
+
+<!-- Copy Toast Notification -->
+<div class="copy-toast" id="copyToast">✓ 복사됨</div>
+
+<!-- Dynamic App Scripts -->
+<script defer src="./prompt-generator/data/prompt-data.js?v=20260413a"></script>
+<script defer src="./prompt-generator/storage/selection-storage.js?v=20260413a"></script>
+<script defer src="./prompt-generator/features/prompt-history.js?v=20260413a"></script>
+<script type="module" src="./prompt-generator/ui/history.js?v=story1"></script>
+</body>
+</html>

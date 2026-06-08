@@ -1,4 +1,4 @@
-(function registerPromptGeneratorStorage(global) {
+﻿(function registerPromptGeneratorStorage(global) {
   const STATE_STORAGE_KEY = 'prompt-generator-state-v1';
   const SESSION_STORAGE_KEY = 'bloom-service-session-v1';
 
@@ -65,3 +65,14 @@
     clearSession,
   };
 })(window);
+
+
+
+
+
+
+
+
+
+
+

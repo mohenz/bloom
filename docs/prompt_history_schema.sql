@@ -1,4 +1,4 @@
-create extension if not exists pgcrypto;
+﻿create extension if not exists pgcrypto;
 
 create or replace function public.set_timestamp()
 returns trigger
@@ -36,3 +36,13 @@ alter table public.prompt_histories enable row level security;
 revoke all on public.prompt_histories from anon, authenticated;
 
 comment on table public.prompt_histories is 'Bloom Prompt History 테이블';
+
+
+
+
+
+
+
+
+
+

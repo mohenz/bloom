@@ -1,4 +1,4 @@
-import {
+﻿import {
   DEFAULT_MODEL,
   getAllowedOrigins,
   getCorsHeaders,
@@ -67,3 +67,14 @@ export default async function handler(request, response) {
     });
   }
 }
+
+
+
+
+
+
+
+
+
+
+

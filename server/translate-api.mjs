@@ -1,4 +1,4 @@
-import http from 'node:http';
+﻿import http from 'node:http';
 import {
   DEFAULT_MODEL,
   getAllowedOrigins,
@@ -123,3 +123,4 @@ const server = http.createServer(async (request, response) => {
 server.listen(PORT, () => {
   console.log(`Prompt translation API listening on http://localhost:${PORT}`);
 });
+

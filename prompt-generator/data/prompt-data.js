@@ -1,4 +1,4 @@
-(function registerPromptGeneratorData(global) {
+﻿(function registerPromptGeneratorData(global) {
   const DATA = {
     'location-indoor': { color: 'pink', items: ['카페', '침실', '거실', '주방', '욕실', '사무실', '도서관', '교실', '상점', '박물관', '클럽', '식당', '헬스장', '호텔 로비'] },
     'location-outdoor': { color: 'pink', items: ['도시 거리', '공원', '해변', '산속', '농촌 들판', '골목길', '루프탑', '광장', '놀이공원', '정원', '숲속'] },
@@ -417,3 +417,14 @@
     EN_LABELS,
   };
 })(window);
+
+
+
+
+
+
+
+
+
+
+

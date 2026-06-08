@@ -1,4 +1,4 @@
-import { DEFAULT_MODEL } from '../lib/translate-prompt.js';
+﻿import { DEFAULT_MODEL } from '../lib/translate-prompt.js';
 import { isAuthStoreConfigured } from '../lib/auth-store.js';
 
 export default function handler(_request, response) {
@@ -9,3 +9,14 @@ export default function handler(_request, response) {
     authConfigured: isAuthStoreConfigured(),
   });
 }
+
+
+
+
+
+
+
+
+
+
+

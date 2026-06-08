@@ -1,4 +1,4 @@
-create extension if not exists pgcrypto;
+﻿create extension if not exists pgcrypto;
 
 create or replace function public.set_timestamp()
 returns trigger
@@ -89,3 +89,13 @@ comment on table public.auth_sessions is 'Bloom 일반 로그인 세션 테이�
 --   'scrypt$16384$8$1$<salt>$<hash>',
 --   'Bloom Admin'
 -- );
+
+
+
+
+
+
+
+
+
+

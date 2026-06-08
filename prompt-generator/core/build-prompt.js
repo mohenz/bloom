@@ -1,4 +1,4 @@
-(function registerPromptGeneratorCore(global) {
+﻿(function registerPromptGeneratorCore(global) {
   const dataModule = global.PromptGeneratorData || {};
   const EN_LABELS = dataModule.EN_LABELS || {};
 
@@ -415,3 +415,14 @@
     buildEnglishSentencePrompt,
   };
 })(window);
+
+
+
+
+
+
+
+
+
+
+

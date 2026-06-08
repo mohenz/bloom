@@ -1,4 +1,4 @@
-import { hashPassword } from '../lib/auth-utils.js';
+﻿import { hashPassword } from '../lib/auth-utils.js';
 
 const password = process.argv[2] || '';
 
@@ -9,3 +9,4 @@ if (!password) {
 
 const hashedPassword = await hashPassword(password);
 console.log(hashedPassword);
+

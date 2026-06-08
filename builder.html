@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="ko" class="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bloom Universe - 프롬프트 빌더</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2311110f'/%3E%3Cpath d='M18 44V20h12.5c7.3 0 11.5 3.8 11.5 9.6 0 4.8-2.8 8.1-7.4 9.5L44 44h-8.3l-8.1-4.2H26V44h-8zm8-10.4h4.1c2.7 0 4.2-1.3 4.2-3.6s-1.5-3.5-4.2-3.5H26v7.1z' fill='%23f0a500'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@100..800&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind Play CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+          "on-primary": "#ffffff",
+          "secondary-fixed": "#d8e3fa",
+          "on-tertiary": "#ffffff",
+          "primary-fixed-dim": "#b3c5ff",
+          "secondary-container": "#d5e0f7",
+          "on-secondary-fixed-variant": "#3c475a",
+          "inverse-primary": "#b3c5ff",
+          "inverse-surface": "#2f3133",
+          "background": "#f9f9fc",
+          "surface-container-highest": "#e2e2e5",
+          "outline": "#757682",
+          "on-tertiary-container": "#d37758",
+          "on-primary-container": "#758dd5",
+          "outline-variant": "#c5c6d2",
+          "surface-dim": "#dadadc",
+          "on-background": "#1a1c1e",
+          "tertiary-fixed-dim": "#ffb59e",
+          "tertiary-container": "#501300",
+          "primary": "#00113a",
+          "inverse-on-surface": "#f0f0f3",
+          "on-surface": "#1a1c1e",
+          "surface-tint": "#435b9f",
+          "on-surface-variant": "#444650",
+          "on-primary-fixed": "#00174a",
+          "primary-fixed": "#dbe1ff",
+          "surface-container-lowest": "#ffffff",
+          "error": "#ba1a1a",
+          "surface-container": "#eeeef0",
+          "on-error-container": "#93000a",
+          "secondary": "#545f72",
+          "surface-bright": "#f9f9fc",
+          "on-tertiary-fixed-variant": "#783018",
+          "error-container": "#ffdad6",
+          "on-secondary-fixed": "#111c2c",
+          "primary-container": "#002366",
+          "on-error": "#ffffff",
+          "tertiary-fixed": "#ffdbd0",
+          "on-primary-fixed-variant": "#2a4386",
+          "surface-container-high": "#e8e8ea",
+          "on-tertiary-fixed": "#390b00",
+          "surface-container-low": "#f3f3f6",
+          "tertiary": "#2d0700",
+          "surface-variant": "#e2e2e5",
+          "on-secondary-container": "#586377",
+          "on-secondary": "#ffffff",
+          "secondary-fixed-dim": "#bcc7dd",
+          "surface": "#ffffff",
+          "border": "#1a1c1e",
+          "primary-container-light": "#e0e6f0"
+        },
+        "borderRadius": {
+          "DEFAULT": "0px",
+          "lg": "0px",
+          "xl": "0px",
+          "full": "9999px"
+        },
+        "spacing": {
+          "xxl": "80px",
+          "lg": "24px",
+          "gutter": "24px",
+          "md": "16px",
+          "sm": "8px",
+          "unit": "4px",
+          "xs": "4px",
+          "xl": "48px",
+          "margin-desktop": "64px",
+          "margin-mobile": "16px"
+        },
+        "fontFamily": {
+          "headline-lg": ["IBM Plex Sans", "Noto Sans KR", "sans-serif"],
+          "body-md": ["IBM Plex Sans", "Noto Sans KR", "sans-serif"],
+          "headline-md": ["IBM Plex Sans", "Noto Sans KR", "sans-serif"],
+          "label-sm": ["JetBrains Mono", "monospace"],
+          "body-lg": ["IBM Plex Sans", "Noto Sans KR", "sans-serif"],
+          "display-lg-mobile": ["IBM Plex Sans", "Noto Sans KR", "sans-serif"],
+          "label-md": ["JetBrains Mono", "monospace"],
+          "display-lg": ["IBM Plex Sans", "Noto Sans KR", "sans-serif"]
+        },
+        "fontSize": {
+          "headline-lg": ["32px", {"lineHeight": "1.2", "fontWeight": "600"}],
+          "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+          "headline-md": ["24px", {"lineHeight": "1.2", "fontWeight": "600"}],
+          "label-sm": ["12px", {"lineHeight": "1.4", "fontWeight": "500"}],
+          "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+          "display-lg-mobile": ["40px", {"lineHeight": "1.1", "fontWeight": "700"}],
+          "label-md": ["14px", {"lineHeight": "1.4", "letterSpacing": "0.05em", "fontWeight": "500"}],
+          "display-lg": ["64px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+        }
+      },
+    },
+  }
+</script>
+<style>
+  /* Zero radius policy enforcement */
+  * { border-radius: 0px !important; }
+  .hard-shadow {
+    box-shadow: 4px 4px 0px 0px #1a1c1e;
+  }
+  .hard-shadow-md {
+    box-shadow: 6px 6px 0px 0px #1a1c1e;
+  }
+  .hard-shadow-lg {
+    box-shadow: 8px 8px 0px 0px #1a1c1e;
+  }
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    vertical-align: middle;
+  }
+  ::selection {
+    background-color: #002366;
+    color: white;
+  }
+  /* Button hover scale-effect matching Stitch code */
+  .btn-hover-effect {
+    transition: all 0.15s ease-in-out;
+  }
+  .btn-hover-effect:hover {
+    transform: translate(-4px, -4px);
+    box-shadow: 4px 4px 0px 0px #1a1c1e;
+  }
+  .btn-hover-effect:active {
+    transform: translate(1px, 1px);
+    box-shadow: 1px 1px 0px 0px #1a1c1e;
+  }
+</style>
+<link rel="stylesheet" href="./prompt-generator/styles/app.css?v=20260608c">
+</head>
+<body class="bg-background text-on-surface antialiased font-body-md min-h-screen pb-xxl">
+
+<div class="service-shell min-h-screen flex flex-col justify-between">
+  <!-- PROMPT BUILDER SCREEN -->
+  <section class="screen prompt-builder-screen" id="promptBuilderScreen">
+    <header class="bg-surface w-full border-b-2 border-on-surface sticky top-0 z-50">
+      <nav class="flex justify-between items-center max-w-[1280px] mx-auto px-lg md:px-margin-desktop py-md w-full">
+        <div class="font-headline-md text-headline-md font-bold text-on-surface flex items-center gap-sm">
+          <span class="material-symbols-outlined text-primary text-[28px]" data-icon="construction">construction</span>
+          <span>✦ PROMPT BUILDER</span>
+        </div>
+        <div class="flex items-center gap-md">
+          <a class="border-2 border-on-surface px-md py-sm font-label-sm text-label-sm hover:bg-surface-container-low transition-all bg-white font-bold block text-center" href="./index.html">메인으로</a>
+          <a class="border-2 border-on-surface px-md py-sm font-label-sm text-label-sm hover:bg-surface-container-low transition-all bg-white font-bold block text-center" href="./history.html">히스토리</a>
+          <span class="font-label-sm text-label-sm bg-secondary-container text-on-secondary-container px-sm py-unit border border-on-surface font-bold flex items-center gap-xs" id="builderUserBadge"></span>
+          <button class="border-2 border-on-surface px-md py-sm font-label-sm text-label-sm hover:bg-surface-container-low transition-all bg-white font-bold" id="builderLogoutBtn" type="button">로그아웃</button>
+        </div>
+      </nav>
+    </header>
+
+    <main class="max-w-[1280px] mx-auto px-lg md:px-margin-desktop py-xl">
+      <!-- Section Title -->
+      <div class="mb-lg pb-sm border-b-2 border-on-surface">
+        <h2 class="font-headline-lg text-headline-lg">Prompt Engineering Workspace</h2>
+        <p class="font-body-md text-body-md text-on-surface-variant mt-xs">인물·의상·장소·분위기 태그를 선택하여 최적의 단어/문장형 영문 프롬프트를 구성합니다.</p>
+      </div>
+
+      <!-- Workspace layout grids -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter items-start">
+        
+        <!-- Left: Tag groups (col-span-7) -->
+        <div class="lg:col-span-7 space-y-lg">
+          
+          <!-- Category: 장소 & 배경 -->
+          <div class="bg-white border-2 border-on-surface p-xl space-y-md hard-shadow-sm">
+            <div class="font-label-md text-label-md font-bold text-primary border-b-2 border-on-surface pb-xs flex items-center gap-sm uppercase tracking-wide">
+              <span class="material-symbols-outlined text-primary text-[20px]" data-icon="place">place</span>
+              장소 & 배경
+            </div>
+            <div>
+              <div class="font-label-sm text-[10.5px] text-on-surface-variant mb-xs font-bold uppercase tracking-wide">실내</div>
+              <div class="flex flex-wrap gap-sm" id="location-indoor"></div>
+            </div>
+            <div>
+              <div class="font-label-sm text-[10.5px] text-on-surface-variant mb-xs font-bold uppercase tracking-wide">실외</div>
+              <div class="flex flex-wrap gap-sm" id="location-outdoor"></div>
+            </div>
+            <div>
+              <div class="font-label-sm text-[10.5px] text-on-surface-variant mb-xs font-bold uppercase tracking-wide">특수 배경</div>
+              <div class="flex flex-wrap gap-sm" id="location-special"></div>
+            </div>
+          </div>
+
+          <!-- Category: 무드 & 환경 -->
+          <div class="bg-white border-2 border-on-surface p-xl space-y-md hard-shadow-sm">
+            <div class="font-label-md text-label-md font-bold text-primary border-b-2 border-on-surface pb-xs flex items-center gap-sm uppercase tracking-wide">
+              <span class="material-symbols-outlined text-primary text-[20px]" data-icon="wb_sunny">wb_sunny</span>
+              무드 & 환경
+            </div>
+            <div>
+              <div class="font-label-sm text-[10.5px] text-on-surface-variant mb-xs font-bold uppercase tracking-wide">무드</div>
+              <div class="flex flex-wrap gap-sm" id="mood"></div>
+            </div>
+            <div>
+              <div class="font-label-sm text-[10.5px] text-on-surface-variant mb-xs font-bold uppercase tracking-wide">조명</div>
+              <div class="flex flex-wrap gap-sm" id="lighting"></div>
+            </div>
+            <div>
+              <div class="font-label-sm text-[10.5px] text-on-surface-variant mb-xs font-bold uppercase tracking-wide">시간대</div>
+              <div class="flex flex-wrap gap-sm" id="time"></div>
+            </div>
+            <div>
+              <div class="font-label-sm text-[10.5px] text-on-surface-variant mb-xs font-bold uppercase tracking-wide">날씨</div>
+              <div class="flex flex-wrap gap-sm" id="weather"></div>
+            </div>
+            <div>
+              <div class="font-label-sm text-[10.5px] text-on-surface-variant mb-xs font-bold uppercase tracking-wide">계절</div>
+              <div class="flex flex-wrap gap-sm" id="season"></div>
+            </div>
+          </div>
+
+          <!-- Category: 인물 기본 -->
+          <div class="bg-white border-2 border-on-surface p-xl space-y-md hard-shadow-sm">
+            <div class="font-label-md text-label-md font-bold text-primary border-b-2 border-on-surface pb-xs flex items-center gap-sm uppercase tracking-wide">
+              <span class="material-symbols-outlined text-primary text-[20px]" data-icon="person">person</span>
+              인물 기본
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-md">
+              <div>
+                <div class="font-label-sm text-[10.5px] text-on-surface-variant mb-xs font-bold uppercase tracking-wide">성별</div>
+                <div class="flex flex-wrap gap-sm mb-sm" id="gender"></div>
+                <div class="font-label-sm text-[10.5px] text-on-surface-variant mb-xs font-bold uppercase tracking-wide">나이대</div>
+                <div class="flex flex-wrap gap-sm" id="age"></div>
+              </div>
+              <div>
+                <div class="font-label-sm text-[10.5px] text-on-surface-variant mb-xs font-bold uppercase tracking-wide">국적/인종</div>
+                <div class="flex flex-wrap gap-sm mb-sm" id="ethnicity"></div>
+                <div class="font-label-sm text-[10.5px] text-on-surface-variant mb-xs font-bold uppercase tracking-wide">인원</div>
+                <div class="flex flex-wrap gap-sm" id="count"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Category: 헤어스타일 -->
+          <div class="bg-white border-2 border-on-surface p-xl space-y-md hard-shadow-sm">
+            <div class="font-label-md text-label-md font-bold text-primary border-b-2 border-on-surface pb-xs flex items-center gap-sm uppercase tracking-wide">
+              <span class="material-symbols-outlined text-primary text-[20px]" data-icon="content_cut">content_cut</span>
+              헤어스타일
+            </div>
+            <div>
+              <div class="font-label-sm text-[10.5px] text-on-surface-variant mb-xs font-bold uppercase tracking-wide">길이</div>
+              <div class="flex flex-wrap gap-sm" id="hair-length"></div>
+            </div>
+            <div>
+              <div class="font-label-sm text-[10.5px] text-on-surface-variant mb-xs font-bold uppercase tracking-wide">스타일</div>
+              <div class="flex flex-wrap gap-sm" id="hair-style"></div>
+            </div>
+            <div>
+              <div class="font-label-sm text-[10.5px] text-on-surface-variant mb-xs font-bold uppercase tracking-wide">색상</div>
+              <div class="flex flex-wrap gap-sm" id="hair-color"></div>
+            </div>
+          </div>
+
+          <!-- Category: 얼굴 & 표정 -->
+          <div class="bg-white border-2 border-on-surface p-xl space-y-md hard-shadow-sm">
+            <div class="font-label-md text-label-md font-bold text-primary border-b-2 border-on-surface pb-xs flex items-center gap-sm uppercase tracking-wide">
+              <span class="material-symbols-outlined text-primary text-[20px]" data-icon="sentiment_satisfied">sentiment_satisfied</span>
+              얼굴 & 표정
+            </div>
+            <div>
+              <div class="font-label-sm text-[10.5px] text-on-surface-variant mb-xs font-bold uppercase tracking-wide">얼굴형</div>
+              <div class="flex flex-wrap gap-sm" id="face-shape"></div>
+            </div>
+            <div>
+              <div class="font-label-sm text-[10.5px] text-on-surface-variant mb-xs font-bold uppercase tracking-wide">인상</div>
+              <div class="flex flex-wrap gap-sm" id="face-impression"></div>
+            </div>
+            <div>
+              <div class="font-label-sm text-[10.5px] text-on-surface-variant mb-xs font-bold uppercase tracking-wide">표정</div>
+              <div class="flex flex-wrap gap-sm" id="expression"></div>
+            </div>
+            <div>
+              <div class="font-label-sm text-[10.5px] text-on-surface-variant mb-xs font-bold uppercase tracking-wide">눈 타입</div>
+              <div class="flex flex-wrap gap-sm" id="eyes"></div>
+            </div>
+          </div>
+
+          <!-- Category: 체형 & 신체 -->
+          <div class="bg-white border-2 border-on-surface p-xl space-y-md hard-shadow-sm">
+            <div class="font-label-md text-label-md font-bold text-primary border-b-2 border-on-surface pb-xs flex items-center gap-sm uppercase tracking-wide">
+              <span class="material-symbols-outlined text-primary text-[20px]" data-icon="accessibility">accessibility</span>
+              체형 & 신체
+            </div>
+            <div>
+              <div class="font-label-sm text-[10.5px] text-on-surface-variant mb-xs font-bold uppercase tracking-wide">전체 체형</div>
+              <div class="flex flex-wrap gap-sm" id="body-type"></div>
+            </div>
+            <div>
+              <div class="font-label-sm text-[10.5px] text-on-surface-variant mb-xs font-bold uppercase tracking-wide">키</div>
+              <div class="flex flex-wrap gap-sm" id="height"></div>
+            </div>
+            <div>
+              <div class="font-label-sm text-[10.5px] text-on-surface-variant mb-xs font-bold uppercase tracking-wide">피부 톤</div>
+              <div class="flex flex-wrap gap-sm" id="skin"></div>
+            </div>
+          </div>
+
+          <!-- Category: 의상 -->
+          <div class="bg-white border-2 border-on-surface p-xl space-y-md hard-shadow-sm">
+            <div class="font-label-md text-label-md font-bold text-primary border-b-2 border-on-surface pb-xs flex items-center gap-sm uppercase tracking-wide">
+              <span class="material-symbols-outlined text-primary text-[20px]" data-icon="styler">styler</span>
+              의상
+            </div>
+            <div>
+              <div class="font-label-sm text-[10.5px] text-on-surface-variant mb-xs font-bold uppercase tracking-wide">상의</div>
+              <div class="flex flex-wrap gap-sm" id="top"></div>
+            </div>
+            <div>
+              <div class="font-label-sm text-[10.5px] text-on-surface-variant mb-xs font-bold uppercase tracking-wide">하의</div>
+              <div class="flex flex-wrap gap-sm" id="bottom"></div>
+            </div>
+            <div>
+              <div class="font-label-sm text-[10.5px] text-on-surface-variant mb-xs font-bold uppercase tracking-wide">전체/아우터</div>
+              <div class="flex flex-wrap gap-sm" id="outfit"></div>
+            </div>
+            <div>
+              <div class="font-label-sm text-[10.5px] text-on-surface-variant mb-xs font-bold uppercase tracking-wide">신발</div>
+              <div class="flex flex-wrap gap-sm" id="shoes"></div>
+            </div>
+            <div>
+              <div class="font-label-sm text-[10.5px] text-on-surface-variant mb-xs font-bold uppercase tracking-wide">액세서리</div>
+              <div class="flex flex-wrap gap-sm" id="accessories"></div>
+            </div>
+          </div>
+
+          <!-- Category: 행동 & 포즈 -->
+          <div class="bg-white border-2 border-on-surface p-xl space-y-md hard-shadow-sm">
+            <div class="font-label-md text-label-md font-bold text-primary border-b-2 border-on-surface pb-xs flex items-center gap-sm uppercase tracking-wide">
+              <span class="material-symbols-outlined text-primary text-[20px]" data-icon="run_circle">run_circle</span>
+              행동 & 포즈
+            </div>
+            <div>
+              <div class="font-label-sm text-[10.5px] text-on-surface-variant mb-xs font-bold uppercase tracking-wide">포즈</div>
+              <div class="flex flex-wrap gap-sm" id="pose"></div>
+            </div>
+            <div>
+              <div class="font-label-sm text-[10.5px] text-on-surface-variant mb-xs font-bold uppercase tracking-wide">행동</div>
+              <div class="flex flex-wrap gap-sm" id="action"></div>
+            </div>
+          </div>
+
+          <!-- Category: 촬영 & 구도 -->
+          <div class="bg-white border-2 border-on-surface p-xl space-y-md hard-shadow-sm">
+            <div class="font-label-md text-label-md font-bold text-primary border-b-2 border-on-surface pb-xs flex items-center gap-sm uppercase tracking-wide">
+              <span class="material-symbols-outlined text-primary text-[20px]" data-icon="photo_camera">photo_camera</span>
+              촬영 & 구도
+            </div>
+            <div>
+              <div class="font-label-sm text-[10.5px] text-on-surface-variant mb-xs font-bold uppercase tracking-wide">구도</div>
+              <div class="flex flex-wrap gap-sm" id="shot"></div>
+            </div>
+            <div>
+              <div class="font-label-sm text-[10.5px] text-on-surface-variant mb-xs font-bold uppercase tracking-wide">스타일</div>
+              <div class="flex flex-wrap gap-sm" id="style"></div>
+            </div>
+            <div>
+              <div class="font-label-sm text-[10.5px] text-on-surface-variant mb-xs font-bold uppercase tracking-wide">품질</div>
+              <div class="flex flex-wrap gap-sm" id="quality"></div>
+            </div>
+            <div>
+              <div class="font-label-sm text-[10.5px] text-on-surface-variant mb-xs font-bold uppercase tracking-wide">해상도</div>
+              <div class="flex flex-wrap gap-sm" id="aspect-ratio"></div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Right: Sticky Output Box Panel (col-span-5) -->
+        <aside class="lg:col-span-5 lg:sticky lg:top-[80px] space-y-lg">
+          <div class="bg-surface border-2 border-on-surface p-xl hard-shadow space-y-lg">
+            
+            <!-- Korean Prompt Area -->
+            <div class="space-y-sm">
+              <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-sm">
+                <span class="font-label-md text-label-md font-bold text-primary uppercase tracking-wide">▸ 한글 Prompt</span>
+                <div class="flex gap-xs flex-wrap">
+                  <button class="border border-on-surface bg-white text-on-surface font-label-sm text-[10.5px] px-sm py-unit hover:bg-surface-container-low flex items-center gap-xs" id="clearBtn" type="button">
+                    <span class="material-symbols-outlined text-[13px]" data-icon="refresh">refresh</span>초기화
+                  </button>
+                  <button class="border border-on-surface bg-[#ffdbd0] text-[#783018] font-label-sm text-[10.5px] px-sm py-unit hover:bg-[#ffb59e] flex items-center gap-xs" id="sentenceBtn" type="button">
+                    <span class="material-symbols-outlined text-[13px]" data-icon="link">link</span>연결
+                  </button>
+                  <button class="border border-on-surface bg-secondary-container text-on-secondary-container font-label-sm text-[10.5px] px-sm py-unit hover:bg-secondary-fixed-dim flex items-center gap-xs" id="translateBtn" type="button">
+                    <span class="material-symbols-outlined text-[13px]" data-icon="g_translate">g_translate</span>EN
+                  </button>
+                  <button class="border border-on-surface bg-primary-container-light text-primary-container font-label-sm text-[10.5px] px-sm py-unit hover:bg-secondary-fixed flex items-center gap-xs" id="englishSentenceBtn" type="button">
+                    <span class="material-symbols-outlined text-[13px]" data-icon="translate">translate</span>EN문장
+                  </button>
+                  <button class="border-2 border-on-surface bg-primary text-on-primary font-label-sm text-[10.5px] px-sm py-unit hover:bg-primary-container transition-all flex items-center gap-xs" id="copyKoreanBtn" type="button">
+                    <span class="material-symbols-outlined text-[13px]" data-icon="content_copy">content_copy</span>복사
+                  </button>
+                </div>
+              </div>
+              <textarea class="w-full border-2 border-on-surface p-md focus:border-primary focus:ring-0 outline-none font-body-md resize-none font-label-sm text-sm" id="promptOutput" placeholder="위에서 옵션을 선택하면 프롬프트가 자동 생성됩니다..." rows="3"></textarea>
+            </div>
+
+            <!-- History Save Panel -->
+            <div class="border-t border-outline-variant pt-md flex flex-col sm:flex-row justify-between items-start sm:items-center gap-md">
+              <div>
+                <span class="block font-label-sm text-label-sm text-on-surface-variant font-bold uppercase tracking-wide">Prompt History</span>
+                <span class="font-label-sm text-[11px] text-on-surface-variant opacity-75 font-mono" id="historySaveStatus">새 저장 모드</span>
+              </div>
+              <div class="flex gap-sm w-full sm:w-auto">
+                <button class="flex-grow sm:flex-grow-0 border-2 border-on-surface bg-primary text-on-primary font-label-sm text-label-sm px-md py-sm hover:bg-primary-container transition-all font-bold flex items-center justify-center gap-xs" id="saveHistoryBtn" type="button">
+                  <span class="material-symbols-outlined text-[15px]" data-icon="save">save</span>저장
+                </button>
+                <button class="flex-grow sm:flex-grow-0 border border-on-surface bg-white text-on-surface font-label-sm text-label-sm px-md py-sm hover:bg-surface-container-low transition-all font-bold flex items-center justify-center gap-xs" id="resetHistoryDraftBtn" type="button">
+                  <span class="material-symbols-outlined text-[15px]" data-icon="add">add</span>새 모드
+                </button>
+              </div>
+            </div>
+
+            <!-- Composed Korean Sentence -->
+            <div id="sentenceWrapper" class="space-y-xs" style="display:none;">
+              <div class="flex justify-between items-center">
+                <span class="font-label-md text-label-md font-bold text-accent2 uppercase tracking-wide">▸ 문장형 Prompt</span>
+                <button class="border border-on-surface bg-[#ffdbd0] text-[#783018] font-label-sm text-[10.5px] px-sm py-unit hover:bg-[#ffb59e] flex items-center gap-xs" id="copySentenceBtn" type="button">
+                  <span class="material-symbols-outlined text-[13px]" data-icon="content_copy">content_copy</span>복사
+                </button>
+              </div>
+              <div class="border-2 border-on-surface p-md bg-surface-container-low font-label-sm text-sm text-[#783018] leading-relaxed font-mono" id="sentenceBox"></div>
+            </div>
+
+            <!-- Translated English Prompt -->
+            <div id="translatedWrapper" class="space-y-xs" style="display:none;">
+              <div class="flex justify-between items-center">
+                <span class="font-label-md text-label-md font-bold text-[#1b5e20] uppercase tracking-wide">▸ EN Prompt</span>
+                <button class="border border-on-surface bg-secondary-container text-on-secondary-container font-label-sm text-[10.5px] px-sm py-unit hover:bg-secondary-fixed-dim flex items-center gap-xs" id="copyEnglishBtn" type="button">
+                  <span class="material-symbols-outlined text-[13px]" data-icon="content_copy">content_copy</span>복사
+                </button>
+              </div>
+              <div class="border-2 border-on-surface p-md bg-surface-container-low font-label-sm text-sm text-primary-container leading-relaxed font-mono font-bold" id="translatedBox"></div>
+            </div>
+
+            <!-- English Composed Sentence -->
+            <div id="englishSentenceWrapper" class="space-y-xs" style="display:none;">
+              <div class="flex justify-between items-center">
+                <span class="font-label-md text-label-md font-bold text-accent4 uppercase tracking-wide">▸ EN Sentence</span>
+                <button class="border border-on-surface bg-primary-container-light text-primary-container font-label-sm text-[10.5px] px-sm py-unit hover:bg-secondary-fixed flex items-center gap-xs" id="copyEnglishSentenceBtn" type="button">
+                  <span class="material-symbols-outlined text-[13px]" data-icon="content_copy">content_copy</span>복사
+                </button>
+              </div>
+              <div class="border-2 border-on-surface p-md bg-surface-container-low font-label-sm text-sm text-primary leading-relaxed font-mono font-bold" id="englishSentenceBox"></div>
+            </div>
+
+            <!-- Negative Prompt Area -->
+            <div class="space-y-xs">
+              <div class="flex justify-between items-center">
+                <span class="font-label-md text-label-md font-bold text-on-surface-variant uppercase tracking-wide">▸ Negative Prompt</span>
+                <button class="border border-on-surface bg-white text-on-surface-variant font-label-sm text-[10.5px] px-sm py-unit hover:bg-surface-container-low flex items-center gap-xs" id="copyNegativeBtn" type="button">
+                  <span class="material-symbols-outlined text-[13px]" data-icon="content_copy">content_copy</span>복사
+                </button>
+              </div>
+              <div class="border-2 border-on-surface p-md bg-surface-container-low font-label-sm text-[12px] text-on-surface-variant leading-relaxed font-mono max-h-[140px] overflow-y-auto" id="negativePromptBox"></div>
+            </div>
+
+          </div>
+        </aside>
+      </div>
+    </main>
+  </section>
+</div>
+
+<!-- Copy Toast Notification -->
+<div class="copy-toast" id="copyToast">✓ 복사됨</div>
+
+<!-- Dynamic App Scripts -->
+<script defer src="./prompt-generator/data/prompt-data.js?v=20260413a"></script>
+<script defer src="./prompt-generator/core/build-prompt.js?v=20260413a"></script>
+<script defer src="./prompt-generator/storage/selection-storage.js?v=20260413a"></script>
+<script defer src="./prompt-generator/features/prompt-history.js?v=20260413a"></script>
+<script type="module" src="./prompt-generator/ui/builder.js?v=story1"></script>
+</body>
+</html>

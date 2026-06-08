@@ -1,0 +1,6 @@
+.vercel
+.env*
+node_modules/
+stitch_vibe_project_archive*
+
+

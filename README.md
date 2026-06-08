@@ -1,4 +1,4 @@
-# bloom
+﻿# bloom
 
 프롬프트 생성기 정적 프런트와 선택형 영문 생성 로직을 담는 저장소입니다.
 
@@ -90,3 +90,14 @@ npm run start:api
 - 현재 프런트의 기본 영문 생성 기능에는 `ANTHROPIC_API_KEY`가 필요하지 않습니다.
 - Anthropic 기반 번역 API를 별도로 쓰고 싶을 때만 `ANTHROPIC_API_KEY`가 필요합니다.
 - 필요하면 `ALLOWED_ORIGINS`도 설정할 수 있습니다. 기본 예시는 `*`입니다.
+
+
+
+
+
+
+
+
+
+
+

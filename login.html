@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="ko" class="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bloom Universe - 로그인</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2311110f'/%3E%3Cpath d='M18 44V20h12.5c7.3 0 11.5 3.8 11.5 9.6 0 4.8-2.8 8.1-7.4 9.5L44 44h-8.3l-8.1-4.2H26V44h-8zm8-10.4h4.1c2.7 0 4.2-1.3 4.2-3.6s-1.5-3.5-4.2-3.5H26v7.1z' fill='%23f0a500'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@100..800&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind Play CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+          "on-primary": "#ffffff",
+          "secondary-fixed": "#d8e3fa",
+          "on-tertiary": "#ffffff",
+          "primary-fixed-dim": "#b3c5ff",
+          "secondary-container": "#d5e0f7",
+          "on-secondary-fixed-variant": "#3c475a",
+          "inverse-primary": "#b3c5ff",
+          "inverse-surface": "#2f3133",
+          "background": "#f9f9fc",
+          "surface-container-highest": "#e2e2e5",
+          "outline": "#757682",
+          "on-tertiary-container": "#d37758",
+          "on-primary-container": "#758dd5",
+          "outline-variant": "#c5c6d2",
+          "surface-dim": "#dadadc",
+          "on-background": "#1a1c1e",
+          "tertiary-fixed-dim": "#ffb59e",
+          "tertiary-container": "#501300",
+          "primary": "#00113a",
+          "inverse-on-surface": "#f0f0f3",
+          "on-surface": "#1a1c1e",
+          "surface-tint": "#435b9f",
+          "on-surface-variant": "#444650",
+          "on-primary-fixed": "#00174a",
+          "primary-fixed": "#dbe1ff",
+          "surface-container-lowest": "#ffffff",
+          "error": "#ba1a1a",
+          "surface-container": "#eeeef0",
+          "on-error-container": "#93000a",
+          "secondary": "#545f72",
+          "surface-bright": "#f9f9fc",
+          "on-tertiary-fixed-variant": "#783018",
+          "error-container": "#ffdad6",
+          "on-secondary-fixed": "#111c2c",
+          "primary-container": "#002366",
+          "on-error": "#ffffff",
+          "tertiary-fixed": "#ffdbd0",
+          "on-primary-fixed-variant": "#2a4386",
+          "surface-container-high": "#e8e8ea",
+          "on-tertiary-fixed": "#390b00",
+          "surface-container-low": "#f3f3f6",
+          "tertiary": "#2d0700",
+          "surface-variant": "#e2e2e5",
+          "on-secondary-container": "#586377",
+          "on-secondary": "#ffffff",
+          "secondary-fixed-dim": "#bcc7dd",
+          "surface": "#ffffff",
+          "border": "#1a1c1e",
+          "primary-container-light": "#e0e6f0"
+        },
+        "borderRadius": {
+          "DEFAULT": "0px",
+          "lg": "0px",
+          "xl": "0px",
+          "full": "9999px"
+        },
+        "spacing": {
+          "xxl": "80px",
+          "lg": "24px",
+          "gutter": "24px",
+          "md": "16px",
+          "sm": "8px",
+          "unit": "4px",
+          "xs": "4px",
+          "xl": "48px",
+          "margin-desktop": "64px",
+          "margin-mobile": "16px"
+        },
+        "fontFamily": {
+          "headline-lg": ["IBM Plex Sans", "Noto Sans KR", "sans-serif"],
+          "body-md": ["IBM Plex Sans", "Noto Sans KR", "sans-serif"],
+          "headline-md": ["IBM Plex Sans", "Noto Sans KR", "sans-serif"],
+          "label-sm": ["JetBrains Mono", "monospace"],
+          "body-lg": ["IBM Plex Sans", "Noto Sans KR", "sans-serif"],
+          "display-lg-mobile": ["IBM Plex Sans", "Noto Sans KR", "sans-serif"],
+          "label-md": ["JetBrains Mono", "monospace"],
+          "display-lg": ["IBM Plex Sans", "Noto Sans KR", "sans-serif"]
+        },
+        "fontSize": {
+          "headline-lg": ["32px", {"lineHeight": "1.2", "fontWeight": "600"}],
+          "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+          "headline-md": ["24px", {"lineHeight": "1.2", "fontWeight": "600"}],
+          "label-sm": ["12px", {"lineHeight": "1.4", "fontWeight": "500"}],
+          "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+          "display-lg-mobile": ["40px", {"lineHeight": "1.1", "fontWeight": "700"}],
+          "label-md": ["14px", {"lineHeight": "1.4", "letterSpacing": "0.05em", "fontWeight": "500"}],
+          "display-lg": ["64px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+        }
+      },
+    },
+  }
+</script>
+<style>
+  /* Zero radius policy enforcement */
+  * { border-radius: 0px !important; }
+  .hard-shadow {
+    box-shadow: 4px 4px 0px 0px #1a1c1e;
+  }
+  .hard-shadow-md {
+    box-shadow: 6px 6px 0px 0px #1a1c1e;
+  }
+  .hard-shadow-lg {
+    box-shadow: 8px 8px 0px 0px #1a1c1e;
+  }
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    vertical-align: middle;
+  }
+  ::selection {
+    background-color: #002366;
+    color: white;
+  }
+  /* Button hover scale-effect matching Stitch code */
+  .btn-hover-effect {
+    transition: all 0.15s ease-in-out;
+  }
+  .btn-hover-effect:hover {
+    transform: translate(-4px, -4px);
+    box-shadow: 4px 4px 0px 0px #1a1c1e;
+  }
+  .btn-hover-effect:active {
+    transform: translate(1px, 1px);
+    box-shadow: 1px 1px 0px 0px #1a1c1e;
+  }
+  /* Custom display state */
+  .is-hidden { display: none !important; }
+</style>
+<link rel="stylesheet" href="./prompt-generator/styles/app.css?v=20260608c">
+</head>
+<body class="bg-background text-on-surface antialiased font-body-md min-h-screen flex flex-col justify-between">
+
+<div class="service-shell flex-grow flex flex-col justify-between">
+  <!-- LOGIN SCREEN -->
+  <section class="screen login-screen flex-grow flex items-center justify-center p-margin-mobile md:p-margin-desktop bg-background" id="loginScreen">
+    <div class="login-panel max-w-[1000px] w-full grid grid-cols-1 md:grid-cols-12 gap-gutter items-center">
+      <!-- Left Panel: Brand info -->
+      <div class="md:col-span-6 bg-surface border-2 border-on-surface p-xl hard-shadow flex flex-col justify-center min-h-[320px]">
+        <h1 class="font-display-lg text-display-lg-mobile md:text-display-lg leading-[0.9] font-bold text-primary mb-md uppercase">Bloom Universe</h1>
+        <div class="h-2 w-32 bg-primary mb-lg"></div>
+      </div>
+
+      <!-- Right Panel: Login card -->
+      <div class="md:col-span-6 bg-surface border-2 border-on-surface p-xl hard-shadow min-h-[320px]">
+        <div class="flex items-center gap-sm mb-lg border-b-2 border-on-surface pb-sm">
+          <span class="material-symbols-outlined text-primary text-[24px]" data-icon="login">login</span>
+          <h2 class="font-headline-md text-headline-md font-bold uppercase tracking-wide">로그인</h2>
+        </div>
+        <form class="space-y-lg" id="loginForm">
+          <div>
+            <label class="block font-label-md text-label-md text-on-surface mb-xs" for="emailInput">이메일</label>
+            <input class="w-full border-2 border-on-surface p-md focus:border-primary focus:ring-0 outline-none font-body-md" id="emailInput" name="email" type="email" autocomplete="username" placeholder="user@example.com" required>
+          </div>
+          <div>
+            <label class="block font-label-md text-label-md text-on-surface mb-xs" for="passwordInput">비밀번호</label>
+            <input class="w-full border-2 border-on-surface p-md focus:border-primary focus:ring-0 outline-none font-body-md" id="passwordInput" name="password" type="password" autocomplete="current-password" placeholder="비밀번호를 입력하세요" required>
+          </div>
+          <div class="flex justify-between items-center font-label-sm text-label-sm">
+            <p class="text-on-surface-variant" id="loginHelp">이메일과 비밀번호로 로그인합니다.</p>
+            <button class="text-primary hover:underline font-bold" id="openResetModalBtn" type="button">비밀번호 재설정</button>
+          </div>
+          <p class="font-label-sm text-label-sm text-error bg-error-container border-2 border-on-surface p-sm font-semibold is-hidden" id="loginError">이메일 또는 비밀번호가 올바르지 않습니다.</p>
+          
+          <button class="w-full bg-primary text-on-primary py-md font-label-md text-label-md uppercase tracking-widest border-2 border-on-surface btn-hover-effect flex justify-center items-center gap-sm" id="loginSubmitBtn" type="submit">
+            로그인
+            <span class="material-symbols-outlined text-[18px]" data-icon="login">login</span>
+          </button>
+          
+          <div class="space-y-sm pt-sm is-hidden" id="loginAltActions">
+            <button class="w-full bg-secondary-container text-on-secondary-container py-md font-label-md text-label-md uppercase tracking-wider border-2 border-on-surface btn-hover-effect" id="openHostedAppBtn" type="button">정식 앱 열기</button>
+            <button class="w-full bg-white text-on-surface py-md font-label-md text-label-md uppercase tracking-wider border-2 border-on-surface btn-hover-effect" id="guestPreviewBtn" type="button">게스트로 둘러보기</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- Password Reset Modal -->
+<div class="story-modal is-hidden" id="resetPasswordModal" role="dialog" aria-modal="true" aria-labelledby="resetModalTitle">
+  <div class="story-modal-backdrop" id="resetModalBackdrop"></div>
+  <section class="story-modal-panel relative z-10 w-[90%] max-w-[500px] border-2 border-on-surface bg-white hard-shadow-lg flex flex-col justify-between overflow-hidden p-xl">
+    <header class="border-b-2 border-on-surface pb-sm mb-lg flex justify-between items-center">
+      <div class="flex items-center gap-sm">
+        <span class="material-symbols-outlined text-primary text-[24px]" data-icon="lock_reset">lock_reset</span>
+        <h2 class="font-headline-md text-headline-md font-bold uppercase tracking-wide" id="resetModalTitle">비밀번호 재설정</h2>
+      </div>
+      <button class="text-on-surface-variant hover:text-on-surface" id="closeResetModalBtn" type="button">
+        <span class="material-symbols-outlined text-[20px]" data-icon="close">close</span>
+      </button>
+    </header>
+    
+    <form class="space-y-md" id="resetPasswordForm">
+      <div>
+        <label class="block font-label-md text-label-md text-on-surface mb-xs" for="resetEmailInput">이메일</label>
+        <input class="w-full border-2 border-on-surface p-md focus:border-primary focus:ring-0 outline-none font-body-md" id="resetEmailInput" type="email" placeholder="user@example.com" required>
+      </div>
+      <div>
+        <label class="block font-label-md text-label-md text-on-surface mb-xs" for="resetMasterKeyInput">마스터 시큐리티 키</label>
+        <input class="w-full border-2 border-on-surface p-md focus:border-primary focus:ring-0 outline-none font-body-md" id="resetMasterKeyInput" type="password" placeholder="마스터 시큐리티 키를 입력하세요" required>
+      </div>
+      <div>
+        <label class="block font-label-md text-label-md text-on-surface mb-xs" for="resetPasswordInput">새 비밀번호</label>
+        <input class="w-full border-2 border-on-surface p-md focus:border-primary focus:ring-0 outline-none font-body-md" id="resetPasswordInput" type="password" placeholder="새 비밀번호" required>
+      </div>
+      <div>
+        <label class="block font-label-md text-label-md text-on-surface mb-xs" for="resetPasswordConfirmInput">새 비밀번호 확인</label>
+        <input class="w-full border-2 border-on-surface p-md focus:border-primary focus:ring-0 outline-none font-body-md" id="resetPasswordConfirmInput" type="password" placeholder="새 비밀번호 확인" required>
+      </div>
+      
+      <p class="font-label-sm text-label-sm text-error bg-error-container border-2 border-on-surface p-sm font-semibold is-hidden" id="resetError"></p>
+      
+      <button class="w-full bg-primary text-on-primary py-md font-label-md text-label-md uppercase tracking-widest border-2 border-on-surface btn-hover-effect flex justify-center items-center gap-sm mt-lg" id="resetSubmitBtn" type="submit">
+        재설정 실행
+        <span class="material-symbols-outlined text-[18px]" data-icon="done">done</span>
+      </button>
+    </form>
+  </section>
+</div>
+
+<!-- Copy Toast Notification -->
+<div class="copy-toast" id="copyToast">✓ 복사됨</div>
+
+<!-- Dynamic Scripts -->
+<script type="module" src="./prompt-generator/ui/login.js?v=story1"></script>
+</body>
+</html>
