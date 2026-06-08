@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bloom Universe - 濡쒓렇??/title>
+<title>Bloom Universe - 로그인</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2311110f'/%3E%3Cpath d='M18 44V20h12.5c7.3 0 11.5 3.8 11.5 9.6 0 4.8-2.8 8.1-7.4 9.5L44 44h-8.3l-8.1-4.2H26V44h-8zm8-10.4h4.1c2.7 0 4.2-1.3 4.2-3.6s-1.5-3.5-4.2-3.5H26v7.1z' fill='%23f0a500'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -163,30 +163,31 @@
       <div class="md:col-span-6 bg-surface border-2 border-on-surface p-xl hard-shadow min-h-[320px]">
         <div class="flex items-center gap-sm mb-lg border-b-2 border-on-surface pb-sm">
           <span class="material-symbols-outlined text-primary text-[24px]" data-icon="login">login</span>
-          <h2 class="font-headline-md text-headline-md font-bold uppercase tracking-wide">濡쒓렇??/h2>
+          <h2 class="font-headline-md text-headline-md font-bold uppercase tracking-wide">로그인</h2>
         </div>
         <form class="space-y-lg" id="loginForm">
           <div>
-            <label class="block font-label-md text-label-md text-on-surface mb-xs" for="emailInput">?대찓??/label>
+            <label class="block font-label-md text-label-md text-on-surface mb-xs" for="emailInput">이메일</label>
             <input class="w-full border-2 border-on-surface p-md focus:border-primary focus:ring-0 outline-none font-body-md" id="emailInput" name="email" type="email" autocomplete="username" placeholder="user@example.com" required>
           </div>
           <div>
-            <label class="block font-label-md text-label-md text-on-surface mb-xs" for="passwordInput">鍮꾨?踰덊샇</label>
-            <input class="w-full border-2 border-on-surface p-md focus:border-primary focus:ring-0 outline-none font-body-md" id="passwordInput" name="password" type="password" autocomplete="current-password" placeholder="鍮꾨?踰덊샇瑜??낅젰?섏꽭?? required>
+            <label class="block font-label-md text-label-md text-on-surface mb-xs" for="passwordInput">비밀번호</label>
+            <input class="w-full border-2 border-on-surface p-md focus:border-primary focus:ring-0 outline-none font-body-md" id="passwordInput" name="password" type="password" autocomplete="current-password" placeholder="비밀번호를 입력하세요" required>
           </div>
           <div class="flex justify-between items-center font-label-sm text-label-sm">
-            <p class="text-on-surface-variant" id="loginHelp">?대찓?쇨낵 鍮꾨?踰덊샇濡?濡쒓렇?명빀?덈떎.</p>
-            <button class="text-primary hover:underline font-bold" id="openResetModalBtn" type="button">鍮꾨?踰덊샇 ?ъ꽕??/button>
+            <p class="text-on-surface-variant" id="loginHelp">이메일과 비밀번호로 로그인합니다.</p>
+            <button class="text-primary hover:underline font-bold" id="openResetModalBtn" type="button">비밀번호 재설정</button>
           </div>
-          <p class="font-label-sm text-label-sm text-error bg-error-container border-2 border-on-surface p-sm font-semibold is-hidden" id="loginError">?대찓???먮뒗 鍮꾨?踰덊샇媛 ?щ컮瑜댁? ?딆뒿?덈떎.</p>
+          <p class="font-label-sm text-label-sm text-error bg-error-container border-2 border-on-surface p-sm font-semibold is-hidden" id="loginError">이메일 또는 비밀번호가 올바르지 않습니다.</p>
           
           <button class="w-full bg-primary text-on-primary py-md font-label-md text-label-md uppercase tracking-widest border-2 border-on-surface btn-hover-effect flex justify-center items-center gap-sm" id="loginSubmitBtn" type="submit">
-            濡쒓렇??            <span class="material-symbols-outlined text-[18px]" data-icon="login">login</span>
+            로그인
+            <span class="material-symbols-outlined text-[18px]" data-icon="login">login</span>
           </button>
           
           <div class="space-y-sm pt-sm is-hidden" id="loginAltActions">
-            <button class="w-full bg-secondary-container text-on-secondary-container py-md font-label-md text-label-md uppercase tracking-wider border-2 border-on-surface btn-hover-effect" id="openHostedAppBtn" type="button">?뺤떇 ???닿린</button>
-            <button class="w-full bg-white text-on-surface py-md font-label-md text-label-md uppercase tracking-wider border-2 border-on-surface btn-hover-effect" id="guestPreviewBtn" type="button">寃뚯뒪?몃줈 ?섎윭蹂닿린</button>
+            <button class="w-full bg-secondary-container text-on-secondary-container py-md font-label-md text-label-md uppercase tracking-wider border-2 border-on-surface btn-hover-effect" id="openHostedAppBtn" type="button">정식 앱 열기</button>
+            <button class="w-full bg-white text-on-surface py-md font-label-md text-label-md uppercase tracking-wider border-2 border-on-surface btn-hover-effect" id="guestPreviewBtn" type="button">게스트로 둘러보기</button>
           </div>
         </form>
       </div>
@@ -201,7 +202,7 @@
     <header class="border-b-2 border-on-surface pb-sm mb-lg flex justify-between items-center">
       <div class="flex items-center gap-sm">
         <span class="material-symbols-outlined text-primary text-[24px]" data-icon="lock_reset">lock_reset</span>
-        <h2 class="font-headline-md text-headline-md font-bold uppercase tracking-wide" id="resetModalTitle">鍮꾨?踰덊샇 ?ъ꽕??/h2>
+        <h2 class="font-headline-md text-headline-md font-bold uppercase tracking-wide" id="resetModalTitle">비밀번호 재설정</h2>
       </div>
       <button class="text-on-surface-variant hover:text-on-surface" id="closeResetModalBtn" type="button">
         <span class="material-symbols-outlined text-[20px]" data-icon="close">close</span>
@@ -210,26 +211,26 @@
     
     <form class="space-y-md" id="resetPasswordForm">
       <div>
-        <label class="block font-label-md text-label-md text-on-surface mb-xs" for="resetEmailInput">?대찓??/label>
+        <label class="block font-label-md text-label-md text-on-surface mb-xs" for="resetEmailInput">이메일</label>
         <input class="w-full border-2 border-on-surface p-md focus:border-primary focus:ring-0 outline-none font-body-md" id="resetEmailInput" type="email" placeholder="user@example.com" required>
       </div>
       <div>
-        <label class="block font-label-md text-label-md text-on-surface mb-xs" for="resetMasterKeyInput">留덉뒪???쒗걧由ы떚 ??/label>
-        <input class="w-full border-2 border-on-surface p-md focus:border-primary focus:ring-0 outline-none font-body-md" id="resetMasterKeyInput" type="password" placeholder="留덉뒪???쒗걧由ы떚 ?ㅻ? ?낅젰?섏꽭?? required>
+        <label class="block font-label-md text-label-md text-on-surface mb-xs" for="resetMasterKeyInput">마스터 시큐리티 키</label>
+        <input class="w-full border-2 border-on-surface p-md focus:border-primary focus:ring-0 outline-none font-body-md" id="resetMasterKeyInput" type="password" placeholder="마스터 시큐리티 키를 입력하세요" required>
       </div>
       <div>
-        <label class="block font-label-md text-label-md text-on-surface mb-xs" for="resetPasswordInput">??鍮꾨?踰덊샇</label>
-        <input class="w-full border-2 border-on-surface p-md focus:border-primary focus:ring-0 outline-none font-body-md" id="resetPasswordInput" type="password" placeholder="??鍮꾨?踰덊샇" required>
+        <label class="block font-label-md text-label-md text-on-surface mb-xs" for="resetPasswordInput">새 비밀번호</label>
+        <input class="w-full border-2 border-on-surface p-md focus:border-primary focus:ring-0 outline-none font-body-md" id="resetPasswordInput" type="password" placeholder="새 비밀번호" required>
       </div>
       <div>
-        <label class="block font-label-md text-label-md text-on-surface mb-xs" for="resetPasswordConfirmInput">??鍮꾨?踰덊샇 ?뺤씤</label>
-        <input class="w-full border-2 border-on-surface p-md focus:border-primary focus:ring-0 outline-none font-body-md" id="resetPasswordConfirmInput" type="password" placeholder="??鍮꾨?踰덊샇 ?뺤씤" required>
+        <label class="block font-label-md text-label-md text-on-surface mb-xs" for="resetPasswordConfirmInput">새 비밀번호 확인</label>
+        <input class="w-full border-2 border-on-surface p-md focus:border-primary focus:ring-0 outline-none font-body-md" id="resetPasswordConfirmInput" type="password" placeholder="새 비밀번호 확인" required>
       </div>
       
       <p class="font-label-sm text-label-sm text-error bg-error-container border-2 border-on-surface p-sm font-semibold is-hidden" id="resetError"></p>
       
       <button class="w-full bg-primary text-on-primary py-md font-label-md text-label-md uppercase tracking-widest border-2 border-on-surface btn-hover-effect flex justify-center items-center gap-sm mt-lg" id="resetSubmitBtn" type="submit">
-        ?ъ꽕???ㅽ뻾
+        재설정 실행
         <span class="material-symbols-outlined text-[18px]" data-icon="done">done</span>
       </button>
     </form>
@@ -237,7 +238,7 @@
 </div>
 
 <!-- Copy Toast Notification -->
-<div class="copy-toast" id="copyToast">??蹂듭궗??/div>
+<div class="copy-toast" id="copyToast">✓ 복사됨</div>
 
 <!-- Dynamic Scripts -->
 <script type="module" src="./prompt-generator/ui/login.js?v=story2"></script>
