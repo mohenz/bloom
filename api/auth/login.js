@@ -1,5 +1,5 @@
 import { auth, db } from '../../lib/firebase-store.js';
-import admin from 'firebase-admin';
+import { FieldValue } from 'firebase-admin/firestore';
 import {
   buildUserPayload,
   createJsonResponse,
@@ -79,7 +79,7 @@ export default async function handler(request, response) {
     await userRef.set({
       email,
       displayName: finalDisplayName,
-      lastLoginAt: admin.firestore.FieldValue.serverTimestamp(),
+      lastLoginAt: FieldValue.serverTimestamp(),
     }, { merge: true });
 
     // Build user payload for frontend
