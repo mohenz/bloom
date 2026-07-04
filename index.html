@@ -157,6 +157,7 @@
           <a href="#" class="hover:text-primary transition-colors duration-200" id="topbarBrandLink">BLOOM UNIVERSE</a>
         </div>
         <div class="flex items-center gap-md">
+          <a class="border-2 border-on-surface px-md py-sm font-label-sm text-label-sm hover:bg-surface-container-low transition-all bg-white font-bold" href="https://archive-store.vercel.app/" target="_blank" rel="noopener noreferrer">Archive Store</a>
           <button class="border-2 border-on-surface px-md py-sm font-label-sm text-label-sm hover:bg-surface-container-low transition-all bg-white font-bold" id="dashboardLogoutBtn" type="button">로그아웃</button>
         </div>
       </nav>
@@ -178,7 +179,7 @@
         <div class="flex gap-md">
           <div class="border-2 border-on-surface bg-surface-container-low p-md flex flex-col items-center justify-center min-w-[110px] text-center">
             <span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">활성 도구</span>
-            <strong class="font-headline-md text-headline-md text-primary mt-xs">8</strong>
+            <strong class="font-headline-md text-headline-md text-primary mt-xs">9</strong>
           </div>
           <div class="border-2 border-on-surface bg-surface-container-low p-md flex flex-col items-center justify-center min-w-[110px] text-center">
             <span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">예정 도구</span>
@@ -190,7 +191,30 @@
       <!-- Bento Grid Layout -->
       <section class="grid grid-cols-1 md:grid-cols-12 gap-gutter mb-xxl">
 
-        <!-- Card 1: Defect Manage (col-span-6) -->
+        <!-- Card 1: Archive Store (col-span-12) -->
+        <article class="md:col-span-12 bg-surface border-2 border-on-surface flex flex-col group transition-all duration-200 hover:translate-y-[-4px] hover:shadow-[4px_4px_0px_0px_rgba(26,28,30,1)]">
+          <div class="p-lg flex-1 flex flex-col md:flex-row md:items-center md:justify-between gap-lg min-h-[200px]">
+            <div>
+              <div class="flex flex-wrap gap-sm mb-md">
+                <span class="font-label-sm text-[10px] bg-secondary-fixed text-on-secondary-fixed px-sm py-unit border border-on-surface uppercase">Active</span>
+                <span class="font-label-sm text-[10px] bg-primary-fixed text-on-primary-fixed px-sm py-unit border border-on-surface uppercase">New</span>
+              </div>
+              <div class="flex items-center gap-sm mb-sm">
+                <span class="material-symbols-outlined text-primary text-[28px]" data-icon="folder_special">folder_special</span>
+                <h3 class="font-headline-lg text-headline-lg uppercase">Archive Store</h3>
+              </div>
+              <p class="font-body-md text-body-md text-on-surface-variant max-w-3xl">
+                개인 파일과 문서를 Firebase 기반으로 보관하고 검색하는 프라이빗 아카이브 저장소입니다.
+              </p>
+            </div>
+            <a class="bg-primary text-on-primary px-lg py-md font-label-md text-label-md border-2 border-on-surface btn-hover-effect w-fit flex items-center gap-sm shrink-0" href="https://archive-store.vercel.app/" target="_blank" rel="noopener noreferrer">
+              열기
+              <span class="material-symbols-outlined text-[18px]" data-icon="arrow_outward">arrow_outward</span>
+            </a>
+          </div>
+        </article>
+
+        <!-- Card 2: Defect Manage (col-span-6) -->
         <article class="md:col-span-6 bg-surface border-2 border-on-surface flex flex-col group transition-all duration-200 hover:translate-y-[-4px] hover:shadow-[4px_4px_0px_0px_rgba(26,28,30,1)]">
           <div class="p-lg flex-1 flex flex-col justify-between min-h-[240px]">
             <div>
@@ -212,7 +236,7 @@
           </div>
         </article>
 
-        <!-- Card 2: UI Code Helper (col-span-6) -->
+        <!-- Card 3: UI Code Helper (col-span-6) -->
         <article class="md:col-span-6 bg-surface border-2 border-on-surface flex flex-col group transition-all duration-200 hover:translate-y-[-4px] hover:shadow-[4px_4px_0px_0px_rgba(26,28,30,1)]">
           <div class="p-lg flex-1 flex flex-col justify-between min-h-[240px]">
             <div>
@@ -240,7 +264,7 @@
           </div>
         </article>
 
-        <!-- Card 3: CineTube (col-span-4) -->
+        <!-- Card 4: CineTube (col-span-4) -->
         <article class="md:col-span-4 bg-surface border-2 border-on-surface flex flex-col group transition-all duration-200 hover:translate-y-[-4px] hover:shadow-[4px_4px_0px_0px_rgba(26,28,30,1)]">
           <div class="p-lg flex-1 flex flex-col justify-between min-h-[240px]">
             <div>
@@ -262,7 +286,7 @@
           </div>
         </article>
 
-        <!-- Card 4: project-control (col-span-4) -->
+        <!-- Card 5: project-control (col-span-4) -->
         <article class="md:col-span-4 bg-surface border-2 border-on-surface flex flex-col group transition-all duration-200 hover:translate-y-[-4px] hover:shadow-[4px_4px_0px_0px_rgba(26,28,30,1)]">
           <div class="p-lg flex-1 flex flex-col justify-between min-h-[240px]">
             <div>
@@ -284,7 +308,7 @@
           </div>
         </article>
 
-        <!-- Card 5: Web Perf Extension (col-span-4) -->
+        <!-- Card 6: Web Perf Extension (col-span-4) -->
         <article class="md:col-span-4 bg-surface border-2 border-on-surface flex flex-col group transition-all duration-200 hover:translate-y-[-4px] hover:shadow-[4px_4px_0px_0px_rgba(26,28,30,1)]">
           <div class="p-lg flex-1 flex flex-col justify-between min-h-[240px]">
             <div>
@@ -306,7 +330,7 @@
           </div>
         </article>
 
-        <!-- Card 6: Prompt Builder (Featured, col-span-8) -->
+        <!-- Card 7: Prompt Builder (Featured, col-span-8) -->
         <article class="md:col-span-8 bg-surface border-2 border-on-surface flex flex-col group transition-all duration-200 hover:translate-y-[-4px] hover:shadow-[4px_4px_0px_0px_rgba(26,28,30,1)]">
           <div class="p-lg flex-1 flex flex-col justify-between min-h-[260px]">
             <div>
@@ -329,7 +353,7 @@
           </div>
         </article>
 
-        <!-- Card 7: Prompt History (col-span-4) -->
+        <!-- Card 8: Prompt History (col-span-4) -->
         <article class="md:col-span-4 bg-surface border-2 border-on-surface flex flex-col group transition-all duration-200 hover:translate-y-[-4px] hover:shadow-[4px_4px_0px_0px_rgba(26,28,30,1)]">
           <div class="p-lg flex-1 flex flex-col justify-between min-h-[240px]">
             <div>
@@ -351,7 +375,7 @@
           </div>
         </article>
 
-        <!-- Card 8: Story (col-span-4) -->
+        <!-- Card 9: Story (col-span-4) -->
         <article class="md:col-span-4 bg-surface border-2 border-on-surface flex flex-col group transition-all duration-200 hover:translate-y-[-4px] hover:shadow-[4px_4px_0px_0px_rgba(26,28,30,1)]">
           <div class="p-lg flex-1 flex flex-col justify-between min-h-[240px]">
             <div>
@@ -373,7 +397,7 @@
           </div>
         </article>
 
-        <!-- Card 9: ctmall (Planned, col-span-12) -->
+        <!-- Card 10: ctmall (Planned, col-span-12) -->
         <article class="md:col-span-12 bg-surface border-2 border-on-surface border-dashed flex flex-col group transition-all duration-200 hover:translate-y-[-4px] hover:shadow-[4px_4px_0px_0px_rgba(26,28,30,1)]">
           <div class="p-lg flex-1 flex flex-col justify-between">
             <div class="flex flex-col md:flex-row md:items-start gap-xl">
