@@ -1,11 +1,9 @@
-﻿import {
+import { auth } from '../../lib/firebase-store.js';
+import {
   createJsonResponse,
-  getSessionSecret,
   getSessionTokenFromRequest,
-  hashSessionToken,
   serializeExpiredSessionCookie,
 } from '../../lib/auth-utils.js';
-import { isAuthStoreConfigured, revokeSessionByTokenHash } from '../../lib/auth-store.js';
 
 export default async function handler(request, response) {
   // CORS Headers for cross-origin integration
@@ -23,15 +21,16 @@ export default async function handler(request, response) {
     return;
   }
 
-  const sessionToken = getSessionTokenFromRequest(request);
+  const sessionCookie = getSessionTokenFromRequest(request);
 
   try {
-    if (isAuthStoreConfigured() && sessionToken) {
-      const sessionTokenHash = hashSessionToken(sessionToken, getSessionSecret());
-      await revokeSessionByTokenHash(sessionTokenHash);
+    if (sessionCookie) {
+      const decodedClaims = await auth.verifySessionCookie(sessionCookie);
+      // Revoke all refresh tokens and sessions for the user
+      await auth.revokeRefreshTokens(decodedClaims.uid);
     }
   } catch (error) {
-    // Clear cookie regardless of revoke result.
+    // Proceed to clear cookie even if token verification or revocation fails
   }
 
   createJsonResponse(
@@ -45,6 +44,7 @@ export default async function handler(request, response) {
     }
   );
 }
+
 
 
 

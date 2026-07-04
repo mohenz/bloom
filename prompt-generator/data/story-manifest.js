@@ -18,7 +18,7 @@
     { path: 'story/september_memory.md', name: 'september_memory.md', size: 6660 },
     { path: 'story/september_morning_after.md', name: 'september_morning_after.md', size: 1376 },
     { path: 'story/universe_map.md', name: 'universe_map.md', size: 8188 },
-    { path: 'story/Yelim_morning_seduction.md', name: 'Yelim_morning_seduction.md', size: 1571 },
+    { path: 'story/JIAN_morning_seduction.md', name: 'JIAN_morning_seduction.md', size: 1571 },
     { path: 'story/yeonjin/등장인물.md', name: 'yeonjin / 등장인물.md', size: 6677 },
     { path: 'story/yeonjin/서사_분석_및_개선안.md', name: 'yeonjin / 서사_분석_및_개선안.md', size: 15596 },
     { path: 'story/yeonjin/스토리라인.md', name: 'yeonjin / 스토리라인.md', size: 8426 },

@@ -71,9 +71,9 @@ export default async function handler(request, response) {
       return;
     }
 
-    // Hash the new password and update
-    const newPasswordHash = await hashPassword(password);
-    await updateUserPassword(user.id, newPasswordHash);
+    // Update the password in Firebase Auth directly (which hashes it securely)
+    await updateUserPassword(user.id, password);
+
 
     // Revoke all sessions to force logout
     await revokeAllSessionsForUser(user.id);

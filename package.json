@@ -4,20 +4,10 @@
   "version": "1.0.0",
   "type": "module",
   "dependencies": {
+    "firebase-admin": "^14.0.0",
     "pg": "^8.11.3"
   },
   "scripts": {
     "start:api": "node server/translate-api.mjs"
   }
 }
-
-
-
-
-
-
-
-
-
-
-
